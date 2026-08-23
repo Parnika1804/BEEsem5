@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PulseTag — Choose Language</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="state.js"></script>
+  <script src="i18n.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #0f172a;
+      --primary-dark: #020617;
+      --accent-teal: #14b8a6;
+      --teal-bg: #e6f7f5;
+      --teal-text: #0f766e;
+      --hero-bg: #e8f4f8;
+      --card-blue: #e0f2fe;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --white: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--hero-bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Announcement Bar */
+    .announcement-bar {
+      background: var(--teal-bg);
+      color: var(--teal-text);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .announcement-badge {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--accent-teal);
+      border-radius: 50%;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Page Main Container */
+    .page {
+      width: 100%;
+      max-width: 640px;
+      margin: 20px auto 40px;
+      padding: 0 24px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .content {
+      width: 100%;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 48px 40px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+      text-align: center;
+    }
+
+    .step-pill {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 10px;
+      font-size: clamp(26px, 4.5vw, 34px);
+      font-weight: 800;
+      line-height: 1.25;
+      color: #0f172a;
+      letter-spacing: -0.7px;
+    }
+
+    .subtitle {
+      margin: 0 auto 34px;
+      max-width: 440px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .language-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 34px;
+    }
+
+    .language-chip {
+      padding: 20px 18px;
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      background: #f8fafc;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .language-chip .lang-native {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .language-chip .lang-sub {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .language-chip:hover {
+      border-color: #94a3b8;
+      background: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .language-chip.selected {
+      border-color: #0f172a;
+      background: #0f172a;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+    }
+
+    .language-chip.selected .lang-sub {
+      color: #94a3b8;
+    }
+
+    .continue-btn {
+      width: 100%;
+      min-height: 54px;
+      border: 0;
+      border-radius: 9999px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+    }
+
+    .continue-btn:not(:disabled):hover {
+      background: #1e293b;
+      transform: translateY(-2px);
+    }
+
+    .continue-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+      background: #94a3b8;
+      box-shadow: none;
+    }
+
+    @media (max-width: 600px) {
+      .content {
+        padding: 36px 22px;
+        border-radius: 22px;
+      }
+      .language-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <span class="announcement-badge"></span>
+    <span>Your health data, always accessible — Step 1 of Setup</span>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <span class="brand-title">PulseTag</span>
+    </a>
+    <a href="index.html" class="nav-link">Back</a>
+  </nav>
+
+  <main class="page">
+    <section class="content" aria-labelledby="page-title">
+      <span class="step-pill">Step 1 of 4</span>
+
+      <h1 id="page-title" data-i18n="language.title">
+        Choose your language
+      </h1>
+
+      <p class="subtitle" data-i18n="language.subtitle">
+        Select your preferred language to continue with PulseTag.
+      </p>
+
+      <div
+        class="language-options"
+        role="radiogroup"
+        aria-label="Language selection"
+      >
+        <button
+          type="button"
+          class="language-chip"
+          data-language="en"
+          role="radio"
+          aria-checked="false"
+        >
+          <span class="lang-native">English</span>
+          <span class="lang-sub">Default Language</span>
+        </button>
+
+        <button
+          type="button"
+          class="language-chip"
+          data-language="hi"
+          role="radio"
+          aria-checked="false"
+        >
+          <span class="lang-native">हिन्दी</span>
+          <span class="lang-sub">Hindi Language</span>
+        </button>
+      </div>
+
+      <button
+        type="button"
+        id="continueBtn"
+        class="continue-btn"
+        data-i18n="common.continue"
+        disabled
+      >
+        Continue
+      </button>
+    </section>
+  </main>
+
+  <script>
+    const languageChips =
+      document.querySelectorAll(".language-chip");
+
+    const continueBtn =
+      document.getElementById("continueBtn");
+
+    let selectedLanguage = null;
+
+    /*
+     * Select a language.
+     */
+    function selectLanguage(code) {
+      selectedLanguage = code;
+
+      /*
+       * Save the language through state.js.
+       */
+      try {
+        updateState({
+          language: code
+        });
+      } catch (error) {
+        console.error("Unable to save language:", error);
+      }
+
+      /*
+       * Apply translations immediately.
+       */
+      try {
+        setLanguage(code);
+      } catch (error) {
+        console.error("Unable to apply language:", error);
+      }
+
+      /*
+       * Highlight selected chip.
+       */
+      languageChips.forEach((chip) => {
+        const isSelected =
+          chip.dataset.language === code;
+
+        chip.classList.toggle(
+          "selected",
+          isSelected
+        );
+
+        chip.setAttribute(
+          "aria-checked",
+          String(isSelected)
+        );
+      });
+
+      /*
+       * Enable Continue.
+       */
+      continueBtn.disabled = false;
+    }
+
+    /*
+     * Language chip click handlers.
+     */
+    languageChips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        selectLanguage(
+          chip.dataset.language
+        );
+      });
+    });
+
+    /*
+     * Continue to login.
+     */
+    continueBtn.addEventListener("click", () => {
+      if (!selectedLanguage) {
+        return;
+      }
+
+      window.location.href = "login.html";
+    });
+
+    /*
+     * Restore previously saved language visually.
+     */
+    try {
+      const currentState = getState();
+
+      if (
+        currentState &&
+        currentState.language
+      ) {
+        setLanguage(
+          currentState.language
+        );
+
+        languageChips.forEach((chip) => {
+          const isSelected =
+            chip.dataset.language ===
+            currentState.language;
+
+          chip.classList.toggle(
+            "selected",
+            isSelected
+          );
+
+          chip.setAttribute(
+            "aria-checked",
+            String(isSelected)
+          );
+        });
+      }
+    } catch (error) {
+      console.error(
+        "Unable to restore language:",
+        error
+      );
+    }
+  </script>
+</body>
+</html>

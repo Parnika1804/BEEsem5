@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulseTag — Shared Medical Vault</title>
+  <script src="state.js"></script>
+  <script src="i18n.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #0f172a;
+      --primary-dark: #020617;
+      --accent-teal: #14b8a6;
+      --teal-bg: #e6f7f5;
+      --teal-text: #0f766e;
+      --hero-bg: #e8f4f8;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --white: #ffffff;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--hero-bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Announcement Bar */
+    .announcement-bar {
+      background: #fde8e4;
+      color: #991b1b;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .announcement-badge {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #dc2626;
+      border-radius: 50%;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    /* Page Container */
+    .page {
+      width: 100%;
+      max-width: 780px;
+      margin: 20px auto 50px;
+      padding: 0 24px;
+      flex: 1;
+    }
+
+    .card {
+      width: 100%;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 44px 36px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .header {
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 10px;
+      font-size: clamp(26px, 4.5vw, 34px);
+      font-weight: 800;
+      line-height: 1.25;
+      color: #0f172a;
+      letter-spacing: -0.7px;
+    }
+
+    .subtitle {
+      max-width: 560px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* Emergency Section */
+    .emergency-section {
+      margin-bottom: 28px;
+      padding: 24px;
+      border-radius: 22px;
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+    }
+
+    .emergency-section h2 {
+      font-family: 'Poppins', sans-serif;
+      margin-bottom: 16px;
+      color: #991b1b;
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .emergency-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .emergency-item {
+      padding: 16px;
+      border-radius: 16px;
+      background: #ffffff;
+      border: 1px solid #fecaca;
+    }
+
+    .emergency-label {
+      margin-bottom: 4px;
+      color: #991b1b;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .emergency-value {
+      color: #0f172a;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    /* Vault Section */
+    .vault-section {
+      margin-top: 28px;
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+    }
+
+    .vault-heading {
+      margin-bottom: 20px;
+    }
+
+    .vault-heading h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .vault-heading p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .count {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      background: #f1f5f9;
+      padding: 3px 10px;
+      border-radius: 9999px;
+    }
+
+    .document-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .document {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .document-icon,
+    .document-thumbnail {
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+    }
+
+    .document-icon {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .document-icon.pdf {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .document-thumbnail {
+      object-fit: cover;
+      border: 1px solid var(--border);
+    }
+
+    .filename {
+      margin-bottom: 3px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #0f172a;
+      overflow-wrap: anywhere;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .empty {
+      padding: 32px 18px;
+      border: 2px dashed var(--border);
+      border-radius: 18px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .access-error {
+      display: none;
+      padding: 32px 24px;
+      border-radius: 20px;
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      color: #991b1b;
+      text-align: center;
+    }
+
+    .access-error.visible {
+      display: block;
+    }
+
+    .access-error h2 {
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 8px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .access-error p {
+      font-size: 14px;
+      color: #7f1d1d;
+    }
+
+    .public-content.hidden {
+      display: none;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 24px;
+      color: #0f172a;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 32px 18px;
+        border-radius: 22px;
+      }
+      .emergency-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <span class="announcement-badge"></span>
+    <span>Emergency First-Responder View — Pre-Consented Access</span>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <span class="brand-title">PulseTag</span>
+    </a>
+  </nav>
+
+  <main class="page">
+    <section class="card">
+      <div id="accessError" class="access-error" role="alert">
+        <h2>Invalid or expired link</h2>
+        <p>This emergency vault link is missing or does not match the stored patient profile.</p>
+      </div>
+
+      <div id="publicContent" class="public-content">
+        <header class="header">
+          <span class="status-pill">Emergency Triage Records</span>
+          <h1>Shared medical vault</h1>
+          <p class="subtitle">This page was reached through a pre-consented emergency QR. No login is required to view the documents shared for care.</p>
+        </header>
+
+        <section class="emergency-section" aria-labelledby="emergencyHeading">
+          <h2 id="emergencyHeading">
+            <span>🚨</span>
+            <span>Emergency Critical Vitals</span>
+          </h2>
+          <div class="emergency-grid">
+            <div class="emergency-item">
+              <div class="emergency-label">Blood group</div>
+              <div id="bloodGroup" class="emergency-value">Not provided</div>
+            </div>
+            <div class="emergency-item">
+              <div class="emergency-label">Allergies</div>
+              <div id="allergies" class="emergency-value">None listed</div>
+            </div>
+            <div class="emergency-item">
+              <div class="emergency-label">Medications</div>
+              <div id="medications" class="emergency-value">None listed</div>
+            </div>
+            <div class="emergency-item">
+              <div class="emergency-label">Emergency contact</div>
+              <div id="emergencyContact" class="emergency-value">Not provided</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="vault-section" aria-labelledby="documentsHeading">
+          <div class="vault-heading">
+            <h2 id="documentsHeading">Shared Medical Documents</h2>
+            <p>Documents the profile owner has approved for emergency triage and care.</p>
+          </div>
+          <div class="section-heading">
+            <span class="count">Shared files</span>
+            <span id="documentCount" class="count"></span>
+          </div>
+          <div id="documentList" class="document-list"></div>
+        </section>
+
+        <a class="back" href="home.html">← Return to PulseTag Home</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const documentList = document.getElementById("documentList");
+    const documentCount = document.getElementById("documentCount");
+    const accessError = document.getElementById("accessError");
+    const publicContent = document.getElementById("publicContent");
+    const queryPatientId = new URLSearchParams(window.location.search).get("patient");
+    const state = getState();
+    const isValidAccess = Boolean(queryPatientId && queryPatientId === state.patientId);
+
+    function createFileIcon(type) {
+      const icon = document.createElement("div");
+      icon.className = `document-icon ${type === "PDF" ? "pdf" : ""}`;
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", "0 0 24 24");
+      svg.setAttribute("width", "24");
+      svg.setAttribute("height", "24");
+      svg.setAttribute("fill", "none");
+      svg.setAttribute("stroke", "currentColor");
+      svg.setAttribute("stroke-width", "2");
+
+      const outline = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      outline.setAttribute("d", "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z");
+      svg.appendChild(outline);
+
+      const poly = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+      poly.setAttribute("points", "14 2 14 8 20 8");
+      svg.appendChild(poly);
+
+      icon.appendChild(svg);
+      return icon;
+    }
+
+    if (!isValidAccess) {
+      accessError.classList.add("visible");
+      publicContent.classList.add("hidden");
+    } else {
+      updateState({
+        auditLog: [
+          ...(state.auditLog || []),
+          { timestamp: new Date().toISOString(), action: "Vault viewed", accessedVia: "QR link" }
+        ]
+      });
+
+      const emergencyInfo = state.emergencyInfo || {};
+      document.getElementById("bloodGroup").textContent = emergencyInfo.bloodGroup || "Not provided";
+      document.getElementById("allergies").textContent = Array.isArray(emergencyInfo.allergies) && emergencyInfo.allergies.length ? emergencyInfo.allergies.join(", ") : "None listed";
+      document.getElementById("medications").textContent = Array.isArray(emergencyInfo.medications) && emergencyInfo.medications.length ? emergencyInfo.medications.map((item) => `${item.name}${item.dosage ? ` (${item.dosage})` : ""}`).join(", ") : "None listed";
+      const contact = emergencyInfo.contactName && emergencyInfo.contactPhone ? `${emergencyInfo.contactName} (${emergencyInfo.contactPhone})` : emergencyInfo.contactName || emergencyInfo.contactPhone || "Not provided";
+      document.getElementById("emergencyContact").textContent = contact;
+
+      const sharedDocuments = (state.vault || []).filter((item) => item.shareable === true);
+      documentCount.textContent = `${sharedDocuments.length} ${sharedDocuments.length === 1 ? "document" : "documents"}`;
+
+      if (!sharedDocuments.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "No shared documents are currently available.";
+        documentList.appendChild(empty);
+      }
+
+      sharedDocuments.forEach((item) => {
+        const row = document.createElement("article");
+        row.className = "document";
+        const preview = item.previewData && item.type === "Image" ? document.createElement("img") : createFileIcon(item.type);
+        if (preview.tagName === "IMG") {
+          preview.className = "document-thumbnail";
+          preview.src = item.previewData;
+          preview.alt = `${item.filename} preview`;
+        }
+        const text = document.createElement("div");
+        text.innerHTML = '<div class="filename"></div><div class="meta"></div>';
+        text.querySelector(".filename").textContent = item.filename;
+        text.querySelector(".meta").textContent = `${item.type} · Uploaded ${formatDate(item.uploadDate)}`;
+        row.append(preview, text);
+        documentList.appendChild(row);
+      });
+    }
+
+    function formatDate(value) {
+      return new Date(value).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    }
+  </script>
+</body>
+</html>

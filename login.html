@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PulseTag — Login</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="state.js"></script>
+  <script src="i18n.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #0f172a;
+      --primary-dark: #020617;
+      --accent-teal: #14b8a6;
+      --teal-bg: #e6f7f5;
+      --teal-text: #0f766e;
+      --hero-bg: #e8f4f8;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --white: #ffffff;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--hero-bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Announcement Bar */
+    .announcement-bar {
+      background: var(--teal-bg);
+      color: var(--teal-text);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .announcement-badge {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--accent-teal);
+      border-radius: 50%;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Page Main Container */
+    .page {
+      width: 100%;
+      max-width: 580px;
+      margin: 20px auto 40px;
+      padding: 0 24px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .content {
+      width: 100%;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 48px 40px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .step-pill {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 10px;
+      font-size: clamp(26px, 4.5vw, 34px);
+      font-weight: 800;
+      line-height: 1.25;
+      color: #0f172a;
+      letter-spacing: -0.7px;
+    }
+
+    .subtitle {
+      max-width: 440px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .form {
+      max-width: 460px;
+      margin: 0 auto;
+    }
+
+    .field {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      background: #ffffff;
+      overflow: hidden;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: #0f172a;
+      box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.08);
+    }
+
+    .country-code {
+      padding: 0 16px;
+      color: #0f172a;
+      font-size: 16px;
+      font-weight: 700;
+      user-select: none;
+      background: #f8fafc;
+      border-right: 1px solid var(--border);
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="tel"] {
+      width: 100%;
+      min-height: 54px;
+      padding: 0 16px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 600;
+      font-family: inherit;
+    }
+
+    input[type="tel"]::placeholder {
+      color: #94a3b8;
+      font-weight: 400;
+    }
+
+    .hint {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .error {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border: 1px solid #fecaca;
+      border-radius: 12px;
+      background: var(--error-bg);
+      color: var(--error);
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .error.visible {
+      display: block;
+    }
+
+    .submit-btn {
+      width: 100%;
+      min-height: 54px;
+      margin-top: 8px;
+      border: 0;
+      border-radius: 9999px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      background: #1e293b;
+      transform: translateY(-2px);
+    }
+
+    .submit-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .trust-footer-note {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    @media (max-width: 600px) {
+      .content {
+        padding: 36px 22px;
+        border-radius: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <span class="announcement-badge"></span>
+    <span>Your health data, always accessible — Step 2 of Setup</span>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <span class="brand-title">PulseTag</span>
+    </a>
+    <a href="language.html" class="nav-link">Change Language</a>
+  </nav>
+
+  <main class="page">
+    <section class="content" aria-labelledby="page-title">
+      <header class="header">
+        <span class="step-pill">Mobile Authentication</span>
+
+        <h1 id="page-title" data-i18n="login.title">
+          Welcome to PulseTag
+        </h1>
+
+        <p class="subtitle" data-i18n="login.subtitle">
+          Enter your mobile number to continue.
+        </p>
+      </header>
+
+      <form id="loginForm" class="form" novalidate>
+        <div class="field">
+          <label for="phone" data-i18n="login.phoneLabel">
+            Mobile number
+          </label>
+
+          <div class="input-wrapper">
+            <span class="country-code" aria-hidden="true">
+              +91
+            </span>
+
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              inputmode="numeric"
+              autocomplete="tel"
+              maxlength="10"
+              placeholder="10-digit mobile number"
+              data-i18n-placeholder="login.phonePlaceholder"
+              aria-describedby="phoneHint phoneError"
+              required
+            >
+          </div>
+
+          <div id="phoneHint" class="hint" data-i18n="login.phoneHint">
+            Enter your 10-digit Indian mobile number.
+          </div>
+
+          <div
+            id="phoneError"
+            class="error"
+            role="alert"
+            aria-live="polite"
+          ></div>
+        </div>
+
+        <button
+          id="sendOtpBtn"
+          class="submit-btn"
+          type="submit"
+        >
+          <span class="button-text" data-i18n="login.sendOtp">
+            Send OTP
+          </span>
+        </button>
+
+        <div class="trust-footer-note">
+          <span>🔒</span>
+          <span>We'll send a 6-digit verification code.</span>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const phoneInput = document.getElementById("phone");
+    const phoneError = document.getElementById("phoneError");
+    const sendOtpBtn = document.getElementById("sendOtpBtn");
+
+    /*
+     * Translation helper.
+     */
+    function getTranslation(key, fallback) {
+      try {
+        if (typeof translations !== "undefined") {
+          const language =
+            typeof getState === "function"
+              ? getState().language || "en"
+              : "en";
+
+          const value = translations[language]?.[key];
+
+          if (value) {
+            return value;
+          }
+        }
+      } catch (error) {
+        console.warn("Translation unavailable:", error);
+      }
+
+      return fallback;
+    }
+
+    /*
+     * Show inline error.
+     */
+    function showError(text) {
+      phoneError.textContent = text;
+      phoneError.classList.add("visible");
+      phoneInput.setAttribute("aria-invalid", "true");
+    }
+
+    /*
+     * Clear inline error.
+     */
+    function clearError() {
+      phoneError.textContent = "";
+      phoneError.classList.remove("visible");
+      phoneInput.removeAttribute("aria-invalid");
+    }
+
+    /*
+     * Loading state.
+     */
+    function setLoading(isLoading) {
+      sendOtpBtn.disabled = isLoading;
+
+      if (isLoading) {
+        sendOtpBtn.innerHTML = `
+          <span class="loading">
+            <span
+              class="spinner"
+              aria-hidden="true"
+            ></span>
+
+            <span>
+              ${getTranslation(
+                "login.sendingOtp",
+                "Sending OTP..."
+              )}
+            </span>
+          </span>
+        `;
+      } else {
+        sendOtpBtn.innerHTML = `
+          <span class="button-text">
+            ${getTranslation(
+              "login.sendOtp",
+              "Send OTP"
+            )}
+          </span>
+        `;
+      }
+    }
+
+    /*
+     * Mock Send OTP request.
+     */
+    function mockSendOtp(phone) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            phone: phone
+          });
+        }, 1200);
+      });
+    }
+
+    /*
+     * Allow numbers only.
+     */
+    phoneInput.addEventListener("input", () => {
+      phoneInput.value =
+        phoneInput.value
+          .replace(/\D/g, "")
+          .slice(0, 10);
+
+      if (phoneError.classList.contains("visible")) {
+        clearError();
+      }
+    });
+
+    /*
+     * Login form submission.
+     */
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      clearError();
+
+      const phone = phoneInput.value.trim();
+
+      const isValidIndianPhone =
+        /^[6-9]\d{9}$/.test(phone);
+
+      if (!isValidIndianPhone) {
+        showError(
+          getTranslation(
+            "login.invalidPhone",
+            "Please enter a valid 10-digit Indian mobile number."
+          )
+        );
+
+        phoneInput.focus();
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        await mockSendOtp(phone);
+
+        updateState({
+          phone: phone
+        });
+
+        window.location.href = "otp.html";
+      } catch (error) {
+        console.error(
+          "Send OTP failed:",
+          error
+        );
+
+        showError(
+          getTranslation(
+            "login.sendOtpError",
+            "Unable to send OTP. Please try again."
+          )
+        );
+
+        setLoading(false);
+      }
+    });
+
+    /*
+     * Apply saved language on page load.
+     */
+    try {
+      const currentState = getState();
+
+      if (
+        currentState &&
+        currentState.language
+      ) {
+        setLanguage(
+          currentState.language
+        );
+      }
+    } catch (error) {
+      console.warn(
+        "Could not apply saved language:",
+        error
+      );
+    }
+  </script>
+</body>
+</html>

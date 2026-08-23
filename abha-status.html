@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PulseTag — ABHA Health ID</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="state.js"></script>
+  <script src="i18n.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #0f172a;
+      --primary-dark: #020617;
+      --accent-teal: #14b8a6;
+      --teal-bg: #e6f7f5;
+      --teal-text: #0f766e;
+      --hero-bg: #e8f4f8;
+      --card-mint: #dcfce7;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --white: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--hero-bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Announcement Bar */
+    .announcement-bar {
+      background: var(--teal-bg);
+      color: var(--teal-text);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .announcement-badge {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--accent-teal);
+      border-radius: 50%;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    /* Main Container */
+    .page {
+      width: 100%;
+      max-width: 640px;
+      margin: 20px auto 40px;
+      padding: 0 24px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      width: 100%;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 48px 40px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+      text-align: center;
+    }
+
+    .step-pill {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .icon-badge {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 12px;
+      font-size: clamp(26px, 4.5vw, 34px);
+      font-weight: 800;
+      line-height: 1.25;
+      color: #0f172a;
+      letter-spacing: -0.7px;
+    }
+
+    .intro {
+      max-width: 500px;
+      margin: 0 auto 28px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .info-box {
+      max-width: 520px;
+      margin: 0 auto 32px;
+      padding: 24px;
+      border-radius: 20px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .info-box h2 {
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .button {
+      width: 100%;
+      min-height: 54px;
+      padding: 0 24px;
+      border-radius: 9999px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .button-primary {
+      border: 0;
+      background: #0f172a;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+    }
+
+    .button-primary:hover {
+      background: #1e293b;
+      transform: translateY(-2px);
+    }
+
+    .button-secondary {
+      border: 2px solid var(--border);
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .button-secondary:hover {
+      border-color: #94a3b8;
+      background: #f8fafc;
+      transform: translateY(-2px);
+    }
+
+    .loading {
+      padding: 32px 0;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 36px 22px;
+        border-radius: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <span class="announcement-badge"></span>
+    <span>Your health data, always accessible — Step 3 of Setup</span>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <span class="brand-title">PulseTag</span>
+    </a>
+  </nav>
+
+  <main class="page">
+    <section class="card" aria-labelledby="page-title">
+      <div id="loading" class="loading" data-i18n="abha.loading">
+        Checking ABHA status...
+      </div>
+
+      <div id="content" hidden>
+        <span class="step-pill">National Health Identity</span>
+
+        <div class="icon-badge" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+          </svg>
+        </div>
+
+        <h1 id="page-title" data-i18n="abha.title">
+          Your ABHA health ID
+        </h1>
+
+        <p class="intro" data-i18n="abha.intro">
+          ABHA is a secure digital health identity that helps you access and share your health records digitally under the Ayushman Bharat Digital Mission.
+        </p>
+
+        <div class="info-box">
+          <h2 data-i18n="abha.whatIs">
+            What is ABHA?
+          </h2>
+          <p data-i18n="abha.explainer">
+            ABHA stands for Ayushman Bharat Health Account. It gives you a unique 14-digit health ID that connects your medical history safely across hospitals, clinics, and emergency responders.
+          </p>
+        </div>
+
+        <div class="actions">
+          <button
+            type="button"
+            class="button button-primary"
+            id="createAbhaButton"
+            data-i18n="abha.create"
+          >
+            Create new ABHA ID
+          </button>
+
+          <button
+            type="button"
+            class="button button-secondary"
+            id="linkAbhaButton"
+            data-i18n="abha.alreadyHave"
+          >
+            I already have one
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const loading = document.getElementById("loading");
+    const content = document.getElementById("content");
+    const createAbhaButton = document.getElementById("createAbhaButton");
+    const linkAbhaButton = document.getElementById("linkAbhaButton");
+
+    function initializePage() {
+      try {
+        const state = getState();
+
+        if (state?.language) {
+          setLanguage(state.language);
+        }
+
+        /*
+         * If an ABHA is already linked, skip this screen entirely.
+         */
+        if (state?.abha?.linked === true || state?.abha?.id) {
+          window.location.replace("emergency-profile.html");
+          return;
+        }
+
+        /*
+         * No ABHA linked — show the explainer and choices.
+         */
+        loading.hidden = true;
+        content.hidden = false;
+      } catch (error) {
+        loading.hidden = true;
+        content.hidden = false;
+      }
+    }
+
+    createAbhaButton.addEventListener("click", () => {
+      window.location.href = "abha-create.html";
+    });
+
+    linkAbhaButton.addEventListener("click", () => {
+      window.location.href = "abha-link.html";
+    });
+
+    initializePage();
+  </script>
+</body>
+</html>

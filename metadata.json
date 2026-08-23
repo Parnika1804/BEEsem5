@@ -1,0 +1,6 @@
+{
+  "name": "PulseTag",
+  "description": "Accessible emergency health information and shared medical vault with ABDM ABHA integration.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

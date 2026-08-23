@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PulseTag — Consent</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="state.js"></script>
+  <script src="i18n.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #0f172a;
+      --primary-dark: #020617;
+      --accent-teal: #14b8a6;
+      --teal-bg: #e6f7f5;
+      --teal-text: #0f766e;
+      --hero-bg: #e8f4f8;
+      --card-mint: #dcfce7;
+      --card-blue: #e0f2fe;
+      --card-blush: #fee2e2;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --white: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--hero-bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Announcement Bar */
+    .announcement-bar {
+      background: var(--teal-bg);
+      color: var(--teal-text);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .announcement-badge {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--accent-teal);
+      border-radius: 50%;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    /* Page Container */
+    .page {
+      width: 100%;
+      max-width: 680px;
+      margin: 20px auto 50px;
+      padding: 0 24px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      width: 100%;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 48px 40px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .header {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .step-pill {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .shield-badge {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 18px;
+      border-radius: 20px;
+      background: #dcfce7;
+      color: #166534;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 10px;
+      font-size: clamp(26px, 4.5vw, 34px);
+      font-weight: 800;
+      line-height: 1.25;
+      color: #0f172a;
+      letter-spacing: -0.7px;
+    }
+
+    .subtitle {
+      max-width: 480px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .content {
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    .info-list {
+      display: grid;
+      gap: 14px;
+      margin: 28px 0;
+    }
+
+    .info-item {
+      display: flex;
+      gap: 16px;
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      align-items: flex-start;
+    }
+
+    .info-icon {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .info-text strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .info-text span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .note {
+      margin: 24px 0;
+      padding: 16px 20px;
+      border-radius: 16px;
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      color: #0369a1;
+      font-size: 13px;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .button {
+      width: 100%;
+      min-height: 54px;
+      border-radius: 9999px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .button-primary {
+      border: 0;
+      background: #0f172a;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+    }
+
+    .button-primary:hover {
+      background: #1e293b;
+      transform: translateY(-2px);
+    }
+
+    .text-button {
+      display: block;
+      margin: 18px auto 0;
+      padding: 6px 12px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .text-button:hover {
+      color: var(--text);
+    }
+
+    .not-now-panel {
+      display: none;
+      margin-top: 24px;
+      padding: 20px 24px;
+      border-radius: 18px;
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+    }
+
+    .not-now-panel.visible {
+      display: block;
+    }
+
+    .not-now-panel h2 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #991b1b;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .not-now-panel p {
+      margin: 0 0 14px;
+      color: #7f1d1d;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .back-button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #991b1b;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 36px 20px;
+        border-radius: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <span class="announcement-badge"></span>
+    <span>Your health data, always accessible — Privacy & Consent Control</span>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <span class="brand-title">PulseTag</span>
+    </a>
+  </nav>
+
+  <main class="page">
+    <section class="card" aria-labelledby="page-title">
+      <header class="header">
+        <span class="step-pill">Consent Review</span>
+
+        <div class="shield-badge" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+          </svg>
+        </div>
+
+        <h1 id="page-title" data-i18n="consent.title">
+          Before you continue
+        </h1>
+
+        <p class="subtitle" data-i18n="consent.subtitle">
+          PulseTag uses a QR code to make your emergency information available when you need help.
+        </p>
+      </header>
+
+      <div class="content">
+        <div class="info-list">
+          <div class="info-item">
+            <div class="info-icon" aria-hidden="true">1</div>
+            <div class="info-text">
+              <strong data-i18n="consent.whatVisibleTitle">
+                What becomes visible?
+              </strong>
+              <span data-i18n="consent.whatVisible">
+                Your emergency profile can include your blood group, allergies, medications, and emergency contact details.
+              </span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon" aria-hidden="true">2</div>
+            <div class="info-text">
+              <strong data-i18n="consent.whoCanSeeTitle">
+                Who can see it?
+              </strong>
+              <span data-i18n="consent.whoCanSee">
+                Anyone who scans your PulseTag QR code can view the emergency information you have chosen to share.
+              </span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon" aria-hidden="true">3</div>
+            <div class="info-text">
+              <strong data-i18n="consent.controlTitle">
+                You stay in control
+              </strong>
+              <span data-i18n="consent.control">
+                Only the information in your emergency profile is intended for QR-based emergency access.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="note" data-i18n="consent.note">
+          Please agree only if you are comfortable making your emergency profile available through your PulseTag QR code.
+        </div>
+
+        <button
+          id="agreeButton"
+          class="button button-primary"
+          type="button"
+          data-i18n="consent.agree"
+        >
+          I Agree & Generate QR
+        </button>
+
+        <button
+          id="notNowButton"
+          class="text-button"
+          type="button"
+          data-i18n="consent.notNow"
+          aria-expanded="false"
+          aria-controls="notNowPanel"
+        >
+          Not now
+        </button>
+
+        <div
+          id="notNowPanel"
+          class="not-now-panel"
+          aria-hidden="true"
+        >
+          <h2 data-i18n="consent.notNowTitle">
+            What happens if I don't agree?
+          </h2>
+          <p data-i18n="consent.notNowExplanation">
+            Your emergency information will remain saved in PulseTag, but QR-based emergency sharing will not be enabled. You can come back and give consent later.
+          </p>
+          <button
+            id="backButton"
+            class="back-button"
+            type="button"
+            data-i18n="consent.back"
+          >
+            Go back
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const agreeButton = document.getElementById("agreeButton");
+    const notNowButton = document.getElementById("notNowButton");
+    const notNowPanel = document.getElementById("notNowPanel");
+    const backButton = document.getElementById("backButton");
+
+    try {
+      const state = getState();
+
+      if (state?.language) {
+        setLanguage(state.language);
+      }
+    } catch (error) {
+      // Continue using the default page text.
+    }
+
+    agreeButton.addEventListener("click", () => {
+      updateState({
+        consentGranted: true
+      });
+
+      window.location.href = "qr.html";
+    });
+
+    notNowButton.addEventListener("click", () => {
+      const isVisible = notNowPanel.classList.toggle("visible");
+
+      notNowButton.setAttribute(
+        "aria-expanded",
+        String(isVisible)
+      );
+
+      notNowPanel.setAttribute(
+        "aria-hidden",
+        String(!isVisible)
+      );
+
+      if (isVisible) {
+        notNowPanel.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest"
+        });
+      }
+    });
+
+    backButton.addEventListener("click", () => {
+      notNowPanel.classList.remove("visible");
+
+      notNowButton.setAttribute("aria-expanded", "false");
+      notNowPanel.setAttribute("aria-hidden", "true");
+    });
+  </script>
+</body>
+</html>

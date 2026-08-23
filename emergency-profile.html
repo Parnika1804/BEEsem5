@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PulseTag — Emergency Profile</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="state.js"></script>
+  <script src="i18n.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #0f172a;
+      --primary-dark: #020617;
+      --accent-teal: #14b8a6;
+      --teal-bg: #e6f7f5;
+      --teal-text: #0f766e;
+      --hero-bg: #e8f4f8;
+      --card-mint: #dcfce7;
+      --card-blue: #e0f2fe;
+      --card-blush: #fee2e2;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --white: #ffffff;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+      --success: #15803d;
+      --success-bg: #f0fdf4;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--hero-bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Announcement Bar */
+    .announcement-bar {
+      background: var(--teal-bg);
+      color: var(--teal-text);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .announcement-badge {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--accent-teal);
+      border-radius: 50%;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    /* Page Container */
+    .page {
+      width: 100%;
+      max-width: 780px;
+      margin: 20px auto 50px;
+      padding: 0 24px;
+      flex: 1;
+    }
+
+    .card {
+      width: 100%;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 48px 40px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .header {
+      margin-bottom: 36px;
+      text-align: center;
+    }
+
+    .step-pill {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 10px;
+      font-size: clamp(26px, 4.5vw, 34px);
+      font-weight: 800;
+      line-height: 1.25;
+      color: #0f172a;
+      letter-spacing: -0.7px;
+    }
+
+    .subtitle {
+      max-width: 540px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .form {
+      width: 100%;
+    }
+
+    .section {
+      margin-bottom: 24px;
+      padding: 24px;
+      border-radius: 20px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+    }
+
+    .section.health { background: #f0f9ff; border-color: #bae6fd; }
+    .section.allergies { background: #fff1f2; border-color: #fecdd3; }
+    .section.meds { background: #f0fdf4; border-color: #bbf7d0; }
+    .section.contact { background: #fefce8; border-color: #fef08a; }
+    .section.vault { background: #f8fafc; border-color: var(--border); }
+
+    .section-title {
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 4px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .section-description {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 50px;
+      padding: 0 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      outline: none;
+      background: #ffffff;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #0f172a;
+      box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.08);
+    }
+
+    .two-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .chip-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chip-input input {
+      flex: 1;
+    }
+
+    .small-button {
+      min-height: 50px;
+      padding: 0 20px;
+      border: 0;
+      border-radius: 9999px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s ease;
+    }
+
+    .small-button:hover {
+      background: #1e293b;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: #ffffff;
+      border: 1px solid #fecdd3;
+      color: #be123c;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .chip-remove {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #ffe4e6;
+      color: #be123c;
+      font-size: 13px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .medication-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .medication-item {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid #dcfce7;
+    }
+
+    .remove-button {
+      min-height: 46px;
+      padding: 0 14px;
+      border: 1px solid #fecaca;
+      border-radius: 9999px;
+      background: #ffffff;
+      color: var(--error);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .remove-button:hover {
+      background: var(--error-bg);
+    }
+
+    .add-medication {
+      min-height: 48px;
+      padding: 0 20px;
+      border: 2px dashed #86efac;
+      border-radius: 9999px;
+      background: #ffffff;
+      color: #15803d;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    .add-medication:hover {
+      background: #f0fdf4;
+      border-color: #4ade80;
+    }
+
+    .vault-upload {
+      display: grid;
+      gap: 10px;
+    }
+
+    .vault-upload input[type="file"] {
+      padding: 10px;
+      background: #ffffff;
+      border: 1.5px dashed var(--border);
+    }
+
+    .vault-upload-hint {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .selected-files {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .selected-files li {
+      padding: 8px 12px;
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .error {
+      display: none;
+      margin-top: 6px;
+      color: var(--error);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .error.visible {
+      display: block;
+    }
+
+    .success {
+      display: none;
+      margin-bottom: 20px;
+      padding: 14px 18px;
+      border: 1px solid #bbf7d0;
+      border-radius: 14px;
+      background: var(--success-bg);
+      color: var(--success);
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .success.visible {
+      display: block;
+    }
+
+    .save-button {
+      width: 100%;
+      min-height: 56px;
+      margin-top: 18px;
+      border: 0;
+      border-radius: 9999px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+    }
+
+    .save-button:hover:not(:disabled) {
+      background: #1e293b;
+      transform: translateY(-2px);
+    }
+
+    .save-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 650px) {
+      .card {
+        padding: 32px 18px;
+        border-radius: 22px;
+      }
+      .two-columns {
+        grid-template-columns: 1fr;
+      }
+      .medication-item {
+        grid-template-columns: 1fr;
+      }
+      .chip-input {
+        flex-direction: column;
+      }
+      .small-button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <span class="announcement-badge"></span>
+    <span>Your health data, always accessible — Step 4 of Setup</span>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <span class="brand-title">PulseTag</span>
+    </a>
+  </nav>
+
+  <main class="page">
+    <section class="card" aria-labelledby="page-title">
+      <header class="header">
+        <span class="step-pill">Emergency Vitals</span>
+
+        <h1 id="page-title" data-i18n="emergency.title">
+          Emergency profile
+        </h1>
+
+        <p class="subtitle" data-i18n="emergency.subtitle">
+          Add important health information that can help in an emergency.
+        </p>
+      </header>
+
+      <form id="emergencyForm" class="form" novalidate>
+        <!-- Blood group -->
+        <section class="section health">
+          <h2 class="section-title" data-i18n="emergency.healthTitle">
+            Health information
+          </h2>
+
+          <p class="section-description" data-i18n="emergency.healthDescription">
+            Keep these details available for emergency situations.
+          </p>
+
+          <div class="field">
+            <label for="bloodGroup" data-i18n="emergency.bloodGroup">
+              Blood group
+            </label>
+
+            <select id="bloodGroup" required>
+              <option value="" data-i18n="emergency.selectBloodGroup">
+                Select blood group
+              </option>
+              <option value="A+">A+</option>
+              <option value="A-">A−</option>
+              <option value="B+">B+</option>
+              <option value="B-">B−</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB−</option>
+              <option value="O+">O+</option>
+              <option value="O-">O−</option>
+            </select>
+
+            <div
+              id="bloodGroupError"
+              class="error"
+              role="alert"
+            ></div>
+          </div>
+        </section>
+
+        <!-- Allergies -->
+        <section class="section allergies">
+          <h2 class="section-title" data-i18n="emergency.allergiesTitle">
+            Allergies
+          </h2>
+
+          <p class="section-description" data-i18n="emergency.allergiesDescription">
+            Add any allergies that emergency responders should know about.
+          </p>
+
+          <div class="chip-input">
+            <input
+              id="allergyInput"
+              type="text"
+              maxlength="80"
+              placeholder="e.g. Penicillin"
+              data-i18n-placeholder="emergency.allergyPlaceholder"
+              autocomplete="off"
+            >
+
+            <button
+              id="addAllergyButton"
+              type="button"
+              class="small-button"
+              data-i18n="emergency.add"
+            >
+              Add
+            </button>
+          </div>
+
+          <div id="allergyChips" class="chips"></div>
+        </section>
+
+        <!-- Medications -->
+        <section class="section meds">
+          <h2 class="section-title" data-i18n="emergency.medicationsTitle">
+            Medications
+          </h2>
+
+          <p class="section-description" data-i18n="emergency.medicationsDescription">
+            Add current medications and their dosage.
+          </p>
+
+          <div id="medicationList" class="medication-list"></div>
+
+          <button
+            id="addMedicationButton"
+            type="button"
+            class="add-medication"
+            data-i18n="emergency.addMedication"
+          >
+            + Add medication
+          </button>
+        </section>
+
+        <!-- Emergency contact -->
+        <section class="section contact">
+          <h2 class="section-title" data-i18n="emergency.contactTitle">
+            Emergency contact
+          </h2>
+
+          <p class="section-description" data-i18n="emergency.contactDescription">
+            Someone who can be contacted if there is an emergency.
+          </p>
+
+          <div class="two-columns">
+            <div class="field">
+              <label
+                for="contactName"
+                data-i18n="emergency.contactName"
+              >
+                Contact name
+              </label>
+
+              <input
+                id="contactName"
+                type="text"
+                maxlength="100"
+                autocomplete="name"
+                data-i18n-placeholder="emergency.contactNamePlaceholder"
+                placeholder="Full name"
+              >
+
+              <div
+                id="contactNameError"
+                class="error"
+                role="alert"
+              ></div>
+            </div>
+
+            <div class="field">
+              <label
+                for="contactPhone"
+                data-i18n="emergency.contactPhone"
+              >
+                Contact phone
+              </label>
+
+              <input
+                id="contactPhone"
+                type="tel"
+                inputmode="numeric"
+                maxlength="10"
+                autocomplete="tel"
+                data-i18n-placeholder="emergency.contactPhonePlaceholder"
+                placeholder="10-digit mobile number"
+              >
+
+              <div
+                id="contactPhoneError"
+                class="error"
+                role="alert"
+              ></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Documents added with the emergency profile -->
+        <section class="section vault">
+          <h2 class="section-title">Medical documents</h2>
+          <p class="section-description">Add images or PDFs while you complete your emergency information. They will be saved to your medical vault when you continue.</p>
+          <div class="vault-upload">
+            <label for="profileDocuments">Upload documents or images</label>
+            <input id="profileDocuments" type="file" accept="image/*,.pdf,application/pdf" multiple>
+            <p class="vault-upload-hint">Files are added as private documents by default. You can choose which ones to share later in Manage Vault.</p>
+            <ul id="selectedProfileDocuments" class="selected-files" aria-live="polite"></ul>
+          </div>
+        </section>
+
+        <div
+          id="successMessage"
+          class="success"
+          role="status"
+          aria-live="polite"
+          data-i18n="emergency.saved"
+        >
+          Emergency profile saved successfully.
+        </div>
+
+        <button
+          id="saveButton"
+          class="save-button"
+          type="submit"
+          data-i18n="emergency.save"
+        >
+          Save and continue
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("emergencyForm");
+
+    const bloodGroup = document.getElementById("bloodGroup");
+
+    const allergyInput = document.getElementById("allergyInput");
+    const addAllergyButton = document.getElementById("addAllergyButton");
+    const allergyChips = document.getElementById("allergyChips");
+
+    const medicationList = document.getElementById("medicationList");
+    const addMedicationButton =
+      document.getElementById("addMedicationButton");
+
+    const contactName = document.getElementById("contactName");
+    const contactPhone = document.getElementById("contactPhone");
+
+    const saveButton = document.getElementById("saveButton");
+    const successMessage = document.getElementById("successMessage");
+    const profileDocuments = document.getElementById("profileDocuments");
+    const selectedProfileDocuments = document.getElementById("selectedProfileDocuments");
+
+    let allergies = [];
+    let medications = [];
+
+    function renderSelectedDocuments() {
+      selectedProfileDocuments.replaceChildren();
+      [...profileDocuments.files].forEach((file) => {
+        const item = document.createElement("li");
+        item.textContent = `${file.name} (${file.type === "application/pdf" ? "PDF" : "Image"})`;
+        selectedProfileDocuments.appendChild(item);
+      });
+    }
+
+    profileDocuments.addEventListener("change", renderSelectedDocuments);
+
+    function t(key, fallback) {
+      try {
+        if (
+          typeof translations !== "undefined" &&
+          typeof getState === "function"
+        ) {
+          const language = getState().language || "en";
+          const value = translations[language]?.[key];
+
+          if (value) {
+            return value;
+          }
+        }
+      } catch (error) {
+        // Use fallback.
+      }
+
+      return fallback;
+    }
+
+    function showFieldError(elementId, text) {
+      const element = document.getElementById(elementId);
+
+      if (!element) return;
+
+      element.textContent = text;
+      element.classList.add("visible");
+    }
+
+    function clearFieldError(elementId) {
+      const element = document.getElementById(elementId);
+
+      if (!element) return;
+
+      element.textContent = "";
+      element.classList.remove("visible");
+    }
+
+    function renderAllergyChips() {
+      allergyChips.innerHTML = "";
+
+      allergies.forEach((allergy, index) => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+
+        const text = document.createElement("span");
+        text.textContent = allergy;
+
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.className = "chip-remove";
+        removeButton.textContent = "×";
+        removeButton.setAttribute(
+          "aria-label",
+          `${t("emergency.remove", "Remove")} ${allergy}`
+        );
+
+        removeButton.addEventListener("click", () => {
+          allergies.splice(index, 1);
+          renderAllergyChips();
+          updateSaveButton();
+        });
+
+        chip.appendChild(text);
+        chip.appendChild(removeButton);
+        allergyChips.appendChild(chip);
+      });
+    }
+
+    function addAllergy() {
+      const value = allergyInput.value.trim();
+
+      if (!value) {
+        return;
+      }
+
+      const alreadyExists = allergies.some(
+        (allergy) => allergy.toLowerCase() === value.toLowerCase()
+      );
+
+      if (!alreadyExists) {
+        allergies.push(value);
+      }
+
+      allergyInput.value = "";
+      renderAllergyChips();
+      updateSaveButton();
+      allergyInput.focus();
+    }
+
+    function renderMedications() {
+      medicationList.innerHTML = "";
+
+      medications.forEach((medication, index) => {
+        const item = document.createElement("div");
+        item.className = "medication-item";
+
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.maxLength = 100;
+        nameInput.placeholder = t(
+          "emergency.medicationNamePlaceholder",
+          "Medication name"
+        );
+        nameInput.value = medication.name || "";
+        nameInput.setAttribute(
+          "aria-label",
+          t("emergency.medicationName", "Medication name")
+        );
+
+        const dosageInput = document.createElement("input");
+        dosageInput.type = "text";
+        dosageInput.maxLength = 80;
+        dosageInput.placeholder = t(
+          "emergency.dosagePlaceholder",
+          "Dosage, e.g. 500 mg"
+        );
+        dosageInput.value = medication.dosage || "";
+        dosageInput.setAttribute(
+          "aria-label",
+          t("emergency.dosage", "Dosage")
+        );
+
+        const removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.className = "remove-button";
+        removeButton.textContent = t(
+          "emergency.remove",
+          "Remove"
+        );
+
+        nameInput.addEventListener("input", () => {
+          medications[index].name = nameInput.value;
+          updateSaveButton();
+        });
+
+        dosageInput.addEventListener("input", () => {
+          medications[index].dosage = dosageInput.value;
+          updateSaveButton();
+        });
+
+        removeButton.addEventListener("click", () => {
+          medications.splice(index, 1);
+          renderMedications();
+          updateSaveButton();
+        });
+
+        item.appendChild(nameInput);
+        item.appendChild(dosageInput);
+        item.appendChild(removeButton);
+
+        medicationList.appendChild(item);
+      });
+    }
+
+    function addMedication() {
+      medications.push({
+        name: "",
+        dosage: ""
+      });
+
+      renderMedications();
+      updateSaveButton();
+
+      const inputs = medicationList.querySelectorAll("input");
+
+      if (inputs.length) {
+        inputs[inputs.length - 2].focus();
+      }
+    }
+
+    function isContactNameValid() {
+      return contactName.value.trim().length >= 2;
+    }
+
+    function isContactPhoneValid() {
+      return /^[6-9]\d{9}$/.test(contactPhone.value.trim());
+    }
+
+    function areMedicationsValid() {
+      return medications.every(
+        (medication) =>
+          medication.name.trim().length > 0 &&
+          medication.dosage.trim().length > 0
+      );
+    }
+
+    function updateSaveButton() {
+      saveButton.disabled = false;
+    }
+
+    function validateForm(showErrors = true) {
+      let valid = true;
+
+      if (!bloodGroup.value) {
+        valid = false;
+
+        if (showErrors) {
+          showFieldError(
+            "bloodGroupError",
+            t(
+              "emergency.bloodGroupRequired",
+              "Please select your blood group."
+            )
+          );
+        }
+      } else {
+        clearFieldError("bloodGroupError");
+      }
+
+      if (!isContactNameValid()) {
+        valid = false;
+
+        if (showErrors) {
+          showFieldError(
+            "contactNameError",
+            t(
+              "emergency.contactNameRequired",
+              "Please enter the emergency contact's name."
+            )
+          );
+        }
+      } else {
+        clearFieldError("contactNameError");
+      }
+
+      if (!isContactPhoneValid()) {
+        valid = false;
+
+        if (showErrors) {
+          showFieldError(
+            "contactPhoneError",
+            t(
+              "emergency.contactPhoneInvalid",
+              "Please enter a valid 10-digit Indian mobile number."
+            )
+          );
+        }
+      } else {
+        clearFieldError("contactPhoneError");
+      }
+
+      if (!areMedicationsValid()) {
+        valid = false;
+      }
+
+      return valid;
+    }
+
+    function prefillState() {
+      let emergencyInfo = {};
+
+      try {
+        const state = getState();
+
+        if (state?.language) {
+          setLanguage(state.language);
+        }
+
+        emergencyInfo = state?.emergencyInfo || {};
+      } catch (error) {
+        emergencyInfo = {};
+      }
+
+      if (emergencyInfo.bloodGroup) {
+        bloodGroup.value = emergencyInfo.bloodGroup;
+      }
+
+      if (Array.isArray(emergencyInfo.allergies)) {
+        allergies = [...emergencyInfo.allergies];
+      }
+
+      if (Array.isArray(emergencyInfo.medications)) {
+        medications = emergencyInfo.medications.map((medication) => ({
+          name: medication?.name || "",
+          dosage: medication?.dosage || ""
+        }));
+      }
+
+      if (emergencyInfo.contactName) {
+        contactName.value = emergencyInfo.contactName;
+      }
+
+      if (emergencyInfo.contactPhone) {
+        contactPhone.value = emergencyInfo.contactPhone;
+      }
+
+      renderAllergyChips();
+      renderMedications();
+      updateSaveButton();
+    }
+
+    addAllergyButton.addEventListener("click", addAllergy);
+
+    allergyInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        addAllergy();
+      }
+    });
+
+    addMedicationButton.addEventListener("click", addMedication);
+
+    bloodGroup.addEventListener("change", () => {
+      clearFieldError("bloodGroupError");
+      updateSaveButton();
+    });
+
+    contactName.addEventListener("input", () => {
+      clearFieldError("contactNameError");
+      updateSaveButton();
+    });
+
+    contactPhone.addEventListener("input", () => {
+      contactPhone.value = contactPhone.value
+        .replace(/\D/g, "")
+        .slice(0, 10);
+
+      clearFieldError("contactPhoneError");
+      updateSaveButton();
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!validateForm(true)) {
+        updateSaveButton();
+        return;
+      }
+
+      const formData = {
+        bloodGroup: bloodGroup.value,
+        allergies: [...allergies],
+        medications: medications.map((medication) => ({
+          name: medication.name.trim(),
+          dosage: medication.dosage.trim()
+        })),
+        contactName: contactName.value.trim(),
+        contactPhone: contactPhone.value.trim()
+      };
+
+      profileDocuments.setCustomValidity("");
+      const invalidDocument = [...profileDocuments.files].find(
+        (file) => file.type !== "application/pdf" && !file.type.startsWith("image/")
+      );
+
+      if (invalidDocument) {
+        profileDocuments.setCustomValidity("Choose image or PDF files only.");
+        profileDocuments.reportValidity();
+        return;
+      }
+
+      const currentState = getState();
+      const existingVault = Array.isArray(currentState.vault)
+        ? currentState.vault
+        : [];
+      const newVaultItems = await Promise.all([...profileDocuments.files].map((file) => new Promise((resolve, reject) => {
+        if (!file.type.startsWith("image/")) {
+          resolve({
+            id: `doc-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+            filename: file.name,
+            type: "PDF",
+            uploadDate: new Date().toISOString(),
+            shareable: false
+          });
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => resolve({
+          id: `doc-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+          filename: file.name,
+          type: "Image",
+          uploadDate: new Date().toISOString(),
+          shareable: false,
+          previewData: reader.result
+        });
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      })));
+
+      updateState({
+        emergencyInfo: {
+          ...formData,
+          lastUpdated: new Date().toISOString()
+        },
+        vault: [...existingVault, ...newVaultItems]
+      });
+
+      successMessage.classList.add("visible");
+      saveButton.disabled = true;
+
+      setTimeout(() => {
+        window.location.href = "consent.html";
+      }, 700);
+    });
+
+    prefillState();
+  </script>
+</body>
+</html>

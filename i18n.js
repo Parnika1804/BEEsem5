@@ -1,0 +1,180 @@
+const translations = {
+  en: {},
+  hi: {
+    "common.continue": "जारी रखें",
+    "language.title": "अपनी भाषा चुनें",
+    "language.subtitle": "PulseTag के साथ आगे बढ़ने के लिए अपनी पसंदीदा भाषा चुनें।",
+    "login.title": "PulseTag में आपका स्वागत है",
+    "login.subtitle": "जारी रखने के लिए अपना मोबाइल नंबर दर्ज करें।",
+    "login.phoneLabel": "मोबाइल नंबर",
+    "login.phonePlaceholder": "10 अंकों का मोबाइल नंबर",
+    "login.phoneHint": "अपना 10 अंकों का भारतीय मोबाइल नंबर दर्ज करें।",
+    "login.sendOtp": "OTP भेजें",
+    "login.sendingOtp": "OTP भेजा जा रहा है...",
+    "login.invalidPhone": "कृपया 10 अंकों का मान्य भारतीय मोबाइल नंबर दर्ज करें।",
+    "login.sendOtpError": "OTP भेजने में असमर्थ। कृपया फिर से प्रयास करें।",
+    "otp.title": "अपने मोबाइल नंबर की पुष्टि करें",
+    "otp.subtitle": "आपके मोबाइल नंबर पर भेजा गया 6 अंकों का OTP दर्ज करें।",
+    "otp.label": "वन-टाइम पासवर्ड",
+    "otp.noCode": "कोड नहीं मिला?",
+    "otp.verify": "OTP सत्यापित करें",
+    "otp.verifying": "सत्यापित किया जा रहा है...",
+    "otp.resend": "OTP फिर भेजें",
+    "otp.resendIn": "OTP {seconds} सेकंड में फिर भेजें",
+    "otp.invalidLength": "कृपया 6 अंकों का OTP दर्ज करें।",
+    "otp.wrong": "गलत OTP। {attempts} प्रयास शेष हैं।",
+    "otp.locked": "बहुत बार गलत प्रयास हुआ। {seconds} सेकंड बाद फिर प्रयास करें।",
+    "otp.resent": "नया OTP भेज दिया गया है।",
+    "otp.resendError": "OTP फिर भेजने में असमर्थ। कृपया फिर से प्रयास करें।",
+    "abhaCreate.step1Title": "अपना ABHA ID बनाएं",
+    "abhaCreate.step1Subtitle": "शुरू करने के लिए अपना 12 अंकों का आधार नंबर दर्ज करें।",
+    "abhaCreate.aadhaarLabel": "आधार नंबर",
+    "abhaCreate.aadhaarPlaceholder": "12 अंकों का आधार नंबर",
+    "abhaCreate.aadhaarHint": "इस डेमो सत्यापन प्रक्रिया में आपके आधार नंबर का उपयोग केवल इसी उद्देश्य के लिए किया जाता है।",
+    "abhaCreate.continue": "जारी रखें",
+    "abhaCreate.invalidAadhaar": "कृपया 12 अंकों का मान्य आधार नंबर दर्ज करें।",
+    "abhaCreate.step2Title": "आधार OTP सत्यापित करें",
+    "abhaCreate.step2Subtitle": "अपने पंजीकृत मोबाइल नंबर पर भेजा गया 6 अंकों का OTP दर्ज करें।",
+    "abhaCreate.otpLabel": "वन-टाइम पासवर्ड",
+    "abhaCreate.otpPlaceholder": "6 अंकों का OTP",
+    "abhaCreate.otpHint": "इस डेमो के लिए 123456 दर्ज करें।",
+    "abhaCreate.verify": "OTP सत्यापित करें",
+    "abhaCreate.back": "वापस",
+    "abhaCreate.invalidOtp": "कृपया 6 अंकों का OTP दर्ज करें।",
+    "abhaCreate.tooManyAttempts": "बहुत बार गलत प्रयास हुआ। कृपया फिर से शुरू करें।",
+    "abhaCreate.verifying": "सत्यापित किया जा रहा है...",
+    "abhaCreate.wrongOtp": "गलत OTP। {attempts} प्रयास शेष हैं।",
+    "abhaCreate.step3Title": "अपनी जानकारी की पुष्टि करें",
+    "abhaCreate.step3Subtitle": "यह जानकारी डेमो आधार सत्यापन से प्राप्त हुई है।",
+    "abhaCreate.name": "नाम",
+    "abhaCreate.dob": "जन्म तिथि",
+    "abhaCreate.confirm": "पुष्टि करें",
+    "abhaCreate.step4Title": "ABHA ID बन गया",
+    "abhaCreate.step4Subtitle": "आपका डेमो ABHA ID सफलतापूर्वक बन गया है।",
+    "abhaCreate.successText": "आपकी ABHA पहचान अब PulseTag के साथ उपयोग के लिए तैयार है।",
+    "abhaCreate.continueToProfile": "जारी रखें",
+    "abha.title": "अपना ABHA सेट करें",
+    "abha.intro": "ABHA आपके स्वास्थ्य रिकॉर्ड को सुरक्षित रूप से जोड़ता है।",
+    "abha.whatIs": "ABHA क्या है?",
+    "abha.explainer": "ABHA एक सुरक्षित डिजिटल स्वास्थ्य पहचान है, जिससे आपके रिकॉर्ड आसानी से उपलब्ध रहते हैं।",
+    "abha.create": "नया ABHA बनाएं",
+    "abha.alreadyHave": "मेरे पास पहले से ABHA है",
+    "abha.loading": "लोड हो रहा है...",
+    "abhaLink.title": "अपना ABHA ID लिंक करें",
+    "abhaLink.subtitle": "PulseTag से लिंक करने के लिए अपना 14 अंकों का ABHA नंबर दर्ज करें।",
+    "abhaLink.label": "ABHA नंबर",
+    "abhaLink.placeholder": "14 अंकों का ABHA नंबर",
+    "abhaLink.hint": "अपने खाते से जुड़ा 14 अंकों का ABHA नंबर दर्ज करें।",
+    "abhaLink.verify": "सत्यापित करें और लिंक करें",
+    "abhaLink.verifying": "सत्यापित किया जा रहा है...",
+    "abhaLink.back": "वापस",
+    "abhaLink.invalid": "कृपया 14 अंकों का मान्य ABHA नंबर दर्ज करें।",
+    "abhaLink.error": "ABHA नंबर सत्यापित नहीं किया जा सका। कृपया फिर से प्रयास करें।",
+    "consent.title": "अपनी सहमति दें",
+    "consent.subtitle": "आपात स्थिति में आपकी जानकारी साझा करने की अनुमति दें।",
+    "consent.whatVisibleTitle": "क्या दिखाई देगा",
+    "consent.whatVisible": "आपका रक्त समूह, एलर्जी, दवाएं और आपातकालीन संपर्क।",
+    "consent.whoCanSeeTitle": "कौन देख सकता है",
+    "consent.whoCanSee": "आपका QR कोड स्कैन करने वाला कोई भी व्यक्ति।",
+    "consent.controlTitle": "आपका नियंत्रण",
+    "consent.control": "आप किसी भी समय अपनी सहमति बदल सकते हैं।",
+    "consent.note": "केवल आवश्यक स्वास्थ्य जानकारी साझा की जाएगी।",
+    "consent.agree": "मैं सहमत हूं",
+    "consent.notNow": "अभी नहीं",
+    "consent.notNowTitle": "सहमति आवश्यक है",
+    "consent.notNowExplanation": "आपातकालीन QR कोड बनाने के लिए सहमति दें।",
+    "consent.back": "वापस",
+    "emergency.title": "आपातकालीन स्वास्थ्य प्रोफ़ाइल",
+    "emergency.subtitle": "आपात स्थिति में मदद करने वालों के लिए अपनी जानकारी जोड़ें।",
+    "emergency.healthTitle": "स्वास्थ्य जानकारी",
+    "emergency.healthDescription": "महत्वपूर्ण स्वास्थ्य विवरण साझा करें।",
+    "emergency.bloodGroup": "रक्त समूह",
+    "emergency.selectBloodGroup": "रक्त समूह चुनें",
+    "emergency.allergiesTitle": "एलर्जी",
+    "emergency.allergiesDescription": "अपनी एलर्जी जोड़ें।",
+    "emergency.allergyPlaceholder": "एलर्जी दर्ज करें",
+    "emergency.add": "जोड़ें",
+    "emergency.medicationsTitle": "दवाएं",
+    "emergency.medicationsDescription": "वर्तमान दवाएं और उनकी खुराक जोड़ें।",
+    "emergency.addMedication": "दवा जोड़ें",
+    "emergency.medicationName": "दवा का नाम",
+    "emergency.dosage": "खुराक",
+    "emergency.remove": "हटाएं",
+    "emergency.contactTitle": "आपातकालीन संपर्क",
+    "emergency.contactDescription": "किसी विश्वसनीय संपर्क की जानकारी जोड़ें।",
+    "emergency.contactName": "नाम",
+    "emergency.contactNamePlaceholder": "संपर्क का नाम",
+    "emergency.contactPhone": "फोन नंबर",
+    "emergency.contactPhonePlaceholder": "10 अंकों का फोन नंबर",
+    "emergency.saved": "आपकी जानकारी सहेज दी गई है।",
+    "emergency.save": "जानकारी सहेजें",
+    "emergency.medicationNamePlaceholder": "दवा का नाम",
+    "emergency.dosagePlaceholder": "खुराक, जैसे 500 mg",
+    "emergency.bloodGroupRequired": "कृपया अपना रक्त समूह चुनें।",
+    "emergency.contactNameRequired": "कृपया आपातकालीन संपर्क का नाम दर्ज करें।",
+    "emergency.contactPhoneInvalid": "कृपया 10 अंकों का मान्य भारतीय मोबाइल नंबर दर्ज करें।",
+    "home.tagline": "जरूरत के समय आपकी आपातकालीन जानकारी।",
+    "home.heroTitle": "आपातकालीन QR दिखाएं",
+    "home.heroDescription": "अपना PulseTag QR कोड जल्दी खोलें, ताकि जरूरत पड़ने पर आपकी साझा आपातकालीन जानकारी उपलब्ध हो।",
+    "home.showQr": "आपातकालीन QR दिखाएं",
+    "home.editHealth": "स्वास्थ्य जानकारी संपादित करें",
+    "home.editHealthDescription": "अपना रक्त समूह, एलर्जी, दवाएं और आपातकालीन संपर्क अपडेट करें।",
+    "home.abhaStatus": "ABHA स्थिति",
+    "home.reset": "डेमो डेटा रीसेट करें",
+    "home.abhaLinked": "लिंक है",
+    "home.abhaLinkedDescription": "आपका ABHA ID PulseTag से लिंक है।",
+    "home.abhaNotLinked": "लिंक नहीं है",
+    "home.abhaNotLinkedDescription": "अभी कोई ABHA ID लिंक नहीं है।",
+    "home.resetConfirm": "सारा PulseTag डेमो डेटा रीसेट करके फिर से शुरू करें?",
+    "qr.title": "आपातकालीन QR कोड",
+    "qr.subtitle": "मदद करने वालों के साथ अपनी स्वास्थ्य जानकारी सुरक्षित रूप से साझा करें।",
+    "qr.lockedTitle": "QR कोड लॉक है",
+    "qr.lockedText": "अपनी जानकारी साझा करने के लिए पहले सहमति दें।",
+    "qr.backToConsent": "सहमति पर वापस जाएं",
+    "qr.hint": "आपात स्थिति में इस QR कोड को स्कैन करें।",
+    "qr.save": "QR सहेजें",
+    "qr.print": "प्रिंट करें",
+    "qr.continue": "जारी रखें",
+    "qr.scan": "QR कोड स्कैन करें",
+    "qr.scannerTitle": "आपातकालीन जानकारी स्कैन करें",
+    "qr.scannerText": "कैमरा इस्तेमाल करें या अपने डिवाइस से QR कोड की तस्वीर चुनें।",
+    "qr.useCamera": "कैमरा इस्तेमाल करें",
+    "qr.chooseImage": "तस्वीर चुनें",
+    "qr.scanSuccess": "QR कोड सफलतापूर्वक स्कैन हो गया।",
+    "qr.cameraUnsupported": "इस जगह कैमरा स्कैन उपलब्ध नहीं है। इसके बजाय QR तस्वीर चुनें।",
+    "qr.pointCamera": "कैमरे को QR कोड की ओर रखें।",
+    "qr.cameraError": "कैमरे का उपयोग नहीं हो सका। इसके बजाय QR तस्वीर चुनें।",
+    "qr.imageUnsupported": "इस ब्राउज़र में तस्वीर स्कैन उपलब्ध नहीं है।",
+    "qr.imageError": "उस तस्वीर से QR कोड पढ़ा नहीं जा सका।"
+  }
+};
+
+function setLanguage(language) {
+  const selectedTranslations = translations[language] || translations.en;
+
+  document.documentElement.lang = language || "en";
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const value = selectedTranslations[element.dataset.i18n];
+
+    if (value) {
+      element.textContent = value;
+    }
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+    const value = selectedTranslations[element.dataset.i18nPlaceholder];
+
+    if (value) {
+      element.setAttribute("placeholder", value);
+    }
+  });
+
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+    const value = selectedTranslations[element.dataset.i18nAriaLabel];
+
+    if (value) {
+      element.setAttribute("aria-label", value);
+    }
+  });
+}

@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulseTag — Your Health Data, Always Accessible</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="state.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #0f172a;
+      --primary-dark: #020617;
+      --accent-teal: #14b8a6;
+      --teal-bg: #e6f7f5;
+      --teal-text: #0f766e;
+      --hero-bg: #e8f4f8;
+      --strip-bg: #fde8e4;
+      --strip-text: #991b1b;
+      --card-blue: #e0f2fe;
+      --card-mint: #dcfce7;
+      --card-blush: #fee2e2;
+      --card-peach: #fef3c7;
+      --card-lavender: #ede9fe;
+      --text: #1e293b;
+      --muted: #64748b;
+      --white: #ffffff;
+      --border: #e2e8f0;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Announcement Bar */
+    .announcement-bar {
+      background: var(--teal-bg);
+      color: var(--teal-text);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .announcement-badge {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--accent-teal);
+      border-radius: 50%;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      background: var(--white);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f1f5f9;
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: #e2e8f0;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: var(--hero-bg);
+      position: relative;
+      padding: 56px 24px 80px;
+    }
+
+    .hero-container {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .hero-content {
+      max-width: 600px;
+    }
+
+    .hero-heading {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(34px, 5.2vw, 54px);
+      font-weight: 800;
+      line-height: 1.15;
+      color: #0f172a;
+      letter-spacing: -1.2px;
+      margin-bottom: 18px;
+    }
+
+    .hero-subtext {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 480px;
+    }
+
+    .get-started {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 16px 36px;
+      border-radius: 9999px;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s ease, background 0.2s ease;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+    }
+
+    .get-started:hover {
+      background: #1e293b;
+      transform: translateY(-2px);
+    }
+
+    /* Hero Organic Illustration Cluster */
+    .hero-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .illustration-cluster {
+      width: 100%;
+      max-width: 420px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      position: relative;
+    }
+
+    .cluster-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .cluster-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .cluster-card.featured {
+      grid-column: span 2;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 24px;
+    }
+
+    .cluster-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .cluster-card h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .cluster-card p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* Wave Divider */
+    .wave-divider {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      transform: translateY(99%);
+      z-index: 2;
+    }
+
+    .wave-divider svg {
+      position: relative;
+      display: block;
+      width: calc(100% + 1.3px);
+      height: 48px;
+    }
+
+    .wave-divider .shape-fill {
+      fill: var(--hero-bg);
+    }
+
+    /* Trust Strip */
+    .trust-strip {
+      background: var(--strip-bg);
+      padding: 20px 24px;
+      margin-top: 48px;
+    }
+
+    .trust-container {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #7f1d1d;
+    }
+
+    .trust-icon-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #b91c1c;
+      font-weight: 800;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Section Styling */
+    .content-section {
+      padding: 80px 24px;
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 52px;
+    }
+
+    .section-heading {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(26px, 4vw, 36px);
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.8px;
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+
+    .section-subheading {
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    /* 3-Column Category Cards */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .pastel-card {
+      border-radius: 24px;
+      padding: 36px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 280px;
+      transition: transform 0.25s ease;
+    }
+
+    .pastel-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .pastel-card.blue { background: var(--card-blue); }
+    .pastel-card.mint { background: var(--card-mint); }
+    .pastel-card.blush { background: var(--card-blush); }
+    .pastel-card.peach { background: var(--card-peach); }
+    .pastel-card.lavender { background: var(--card-lavender); }
+
+    .card-top {
+      margin-bottom: 24px;
+    }
+
+    .card-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.85);
+      font-size: 12px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 18px;
+    }
+
+    .card-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .card-text {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.6;
+    }
+
+    .card-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      align-self: flex-start;
+      transition: background 0.2s ease;
+    }
+
+    .card-btn:hover {
+      background: #1e293b;
+    }
+
+    /* Product Cards / How it works */
+    .showcase-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .showcase-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 270px;
+    }
+
+    .showcase-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      color: #0f172a;
+    }
+
+    .status-tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: #0f172a;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .showcase-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .showcase-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .showcase-btn {
+      display: inline-flex;
+      align-items: center;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    /* Testimonials Reassurance */
+    .reassurance-section {
+      background: #f8fafc;
+      padding: 80px 24px;
+    }
+
+    .reassurance-grid {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .reassurance-card {
+      background: #ffffff;
+      border-radius: 22px;
+      padding: 32px 26px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .shields-row {
+      display: flex;
+      gap: 4px;
+      color: #0f766e;
+      margin-bottom: 16px;
+    }
+
+    .reassurance-quote {
+      font-size: 15px;
+      color: #334155;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+
+    .person-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    .person-info h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .person-info p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      text-align: center;
+      background: #ffffff;
+    }
+
+    .footer-text {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 960px) {
+      .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .hero-content {
+        max-width: 100%;
+      }
+      .hero-subtext {
+        margin: 0 auto 32px;
+      }
+      .cards-grid, .reassurance-grid {
+        grid-template-columns: 1fr;
+      }
+      .showcase-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .showcase-row {
+        grid-template-columns: 1fr;
+      }
+      .trust-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <span class="announcement-badge"></span>
+    <span>Your health data, always accessible — ABDM Integrated Emergency Identity</span>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar" aria-label="Main Navigation">
+    <a href="index.html" class="brand">
+      <div class="logo-icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <span class="brand-title">PulseTag</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="home.html" class="nav-link">Dashboard</a>
+      <a href="vault.html" class="nav-link">Medical Vault</a>
+      <a href="qr.html" class="nav-link">Emergency QR</a>
+      <a href="language.html" class="nav-link">Language</a>
+    </div>
+
+    <a href="language.html" class="nav-btn">
+      <span>Get Started</span>
+      <span aria-hidden="true">→</span>
+    </a>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1 class="hero-heading" id="title">
+          Your emergency health info,<br>always when it matters.
+        </h1>
+        <p class="hero-subtext tagline">
+          A secure, consent-driven digital health identity with instant offline QR access and verified ABHA sync for critical moments.
+        </p>
+        <a href="language.html" class="get-started">
+          Get Started Now
+        </a>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="illustration-cluster">
+          <div class="cluster-card featured">
+            <div class="cluster-icon-box" style="background: #e0f2fe; color: #0284c7;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+            </div>
+            <div>
+              <h3>Instant Emergency QR</h3>
+              <p>Scannable by responders with zero app download required</p>
+            </div>
+          </div>
+
+          <div class="cluster-card">
+            <div class="cluster-icon-box" style="background: #fee2e2; color: #dc2626; margin-bottom: 12px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+              </svg>
+            </div>
+            <h3>Blood & Allergies</h3>
+            <p>Critical vitals in one clean tap</p>
+          </div>
+
+          <div class="cluster-card">
+            <div class="cluster-icon-box" style="background: #dcfce7; color: #16a34a; margin-bottom: 12px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+              </svg>
+            </div>
+            <h3>ABDM Verified</h3>
+            <p>Official Ayushman Bharat linking</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wavy SVG bottom edge -->
+    <div class="wave-divider" aria-hidden="true">
+      <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M0,0 C150,90 350,-40 500,60 C650,140 900,10 1200,40 L1200,0 L0,0 Z" class="shape-fill"></path>
+      </svg>
+    </div>
+  </header>
+
+  <!-- Trust Strip -->
+  <section class="trust-strip" aria-label="Key Trust Pillars">
+    <div class="trust-container">
+      <div class="trust-item">
+        <span class="trust-icon-circle">✓</span>
+        <span>ABDM Linked</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon-circle">⚡</span>
+        <span>No Login for Emergencies</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon-circle">🔒</span>
+        <span>Consent-First Sharing</span>
+      </div>
+      <div class="trust-item">
+        <span class="trust-icon-circle">📋</span>
+        <span>Audit Logged Access</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feature Cards Section -->
+  <main class="content-section">
+    <div class="section-header">
+      <h2 class="section-heading">Designed for emergency care & patient peace of mind</h2>
+      <p class="section-subheading">Everything you need to keep vital health data ready when seconds count.</p>
+    </div>
+
+    <div class="cards-grid">
+      <article class="pastel-card blue">
+        <div class="card-top">
+          <span class="card-badge">Instant Access</span>
+          <h3 class="card-title">Emergency QR Tag</h3>
+          <p class="card-text">Generate your personal QR code for lockscreens, cards, or wristbands so paramedics can access vitals instantly.</p>
+        </div>
+        <a href="language.html" class="card-btn">Get Your QR</a>
+      </article>
+
+      <article class="pastel-card mint">
+        <div class="card-top">
+          <span class="card-badge">National Health Grid</span>
+          <h3 class="card-title">ABHA Account Sync</h3>
+          <p class="card-text">Link your 14-digit ABHA address or create a new digital health identity powered by ABDM.</p>
+        </div>
+        <a href="language.html" class="card-btn">Link ABHA</a>
+      </article>
+
+      <article class="pastel-card blush">
+        <div class="card-top">
+          <span class="card-badge">Private & Encrypted</span>
+          <h3 class="card-title">Shared Medical Vault</h3>
+          <p class="card-text">Upload prescriptions, ECG reports, and insurance cards, choosing exactly which files are shared in emergencies.</p>
+        </div>
+        <a href="language.html" class="card-btn">Explore Vault</a>
+      </article>
+    </div>
+  </main>
+
+  <!-- How It Works Showcase -->
+  <section class="content-section" style="padding-top: 0;">
+    <div class="section-header">
+      <h2 class="section-heading">How PulseTag works in 4 simple steps</h2>
+      <p class="section-subheading">From setup to life-saving access in under two minutes.</p>
+    </div>
+
+    <div class="showcase-row">
+      <div class="showcase-card">
+        <div class="showcase-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <span class="status-tag">Step 1</span>
+        <h4 class="showcase-title">Quick Profile</h4>
+        <p class="showcase-desc">Enter your blood type, known allergies, and primary contact.</p>
+        <span class="showcase-btn">Instant</span>
+      </div>
+
+      <div class="showcase-card">
+        <div class="showcase-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+          </svg>
+        </div>
+        <span class="status-tag">Step 2</span>
+        <h4 class="showcase-title">ABHA Link</h4>
+        <p class="showcase-desc">Connect your Ayushman Bharat Health Account seamlessly.</p>
+        <span class="showcase-btn">ABDM Verified</span>
+      </div>
+
+      <div class="showcase-card">
+        <div class="showcase-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M7 7h3v3H7zM14 7h3v3h-3zM7 14h3v3H7zM14 14h3v3h-3z"/>
+          </svg>
+        </div>
+        <span class="status-tag">Step 3</span>
+        <h4 class="showcase-title">Generate QR</h4>
+        <p class="showcase-desc">Download your secure emergency QR card to carry anywhere.</p>
+        <span class="showcase-btn">Zero Delay</span>
+      </div>
+
+      <div class="showcase-card">
+        <div class="showcase-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+        </div>
+        <span class="status-tag">Step 4</span>
+        <h4 class="showcase-title">Vault Sharing</h4>
+        <p class="showcase-desc">Attach crucial documents accessible during emergency scans.</p>
+        <span class="showcase-btn">Consent-First</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reassurance / Why Patients Trust PulseTag -->
+  <section class="reassurance-section">
+    <div class="section-header">
+      <h2 class="section-heading">Why patients & doctors trust PulseTag</h2>
+      <p class="section-subheading">Built with privacy guardrails and real-world emergency workflow standards.</p>
+    </div>
+
+    <div class="reassurance-grid">
+      <div class="reassurance-card">
+        <div>
+          <div class="shields-row">
+            <span>🛡️</span><span>🛡️</span><span>🛡️</span>
+          </div>
+          <p class="reassurance-quote">"In trauma cases, discovering a penicillin allergy or rare blood group within 5 seconds makes a critical difference to our triage speed."</p>
+        </div>
+        <div class="person-row">
+          <div class="avatar-circle">DA</div>
+          <div class="person-info">
+            <h4>Dr. Ananya S.</h4>
+            <p>Emergency Medicine Physician</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reassurance-card">
+        <div>
+          <div class="shields-row">
+            <span>🛡️</span><span>🛡️</span><span>🛡️</span>
+          </div>
+          <p class="reassurance-quote">"I like that I stay in full control: only the emergency details I approve are visible through the QR code, while the rest remains private."</p>
+        </div>
+        <div class="person-row">
+          <div class="avatar-circle">RM</div>
+          <div class="person-info">
+            <h4>Rahul M.</h4>
+            <p>PulseTag Cardholder</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reassurance-card">
+        <div>
+          <div class="shields-row">
+            <span>🛡️</span><span>🛡️</span><span>🛡️</span>
+          </div>
+          <p class="reassurance-quote">"The ABDM integration gave my parents a verified ABHA ID in minutes. Knowing they carry their emergency tag gives our family real peace of mind."</p>
+        </div>
+        <div class="person-row">
+          <div class="avatar-circle">PV</div>
+          <div class="person-info">
+            <h4>Pooja V.</h4>
+            <p>Family Caregiver</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p class="footer-text">© 2026 PulseTag — Digital Health & Emergency Identity. All emergency data is consent-governed.</p>
+  </footer>
+
+  <script>
+    /*
+     * Entry-point routing:
+     * Returning users who have already granted consent go directly
+     * to the permanent home screen.
+     */
+    try {
+      const state = getState();
+
+      if (state && state.consentGranted === true) {
+        window.location.replace("home.html");
+      }
+    } catch (error) {
+      // If state cannot be read, remain on the welcome screen.
+    }
+  </script>
+</body>
+</html>

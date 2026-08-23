@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PulseTag — Create ABHA ID</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="state.js"></script>
+  <script src="i18n.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #0f172a;
+      --primary-dark: #020617;
+      --accent-teal: #14b8a6;
+      --teal-bg: #e6f7f5;
+      --teal-text: #0f766e;
+      --hero-bg: #e8f4f8;
+      --card-mint: #dcfce7;
+      --card-blue: #e0f2fe;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --white: #ffffff;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+      --success: #15803d;
+      --success-bg: #f0fdf4;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--hero-bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Announcement Bar */
+    .announcement-bar {
+      background: var(--teal-bg);
+      color: var(--teal-text);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .announcement-badge {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--accent-teal);
+      border-radius: 50%;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Page Container */
+    .page {
+      width: 100%;
+      max-width: 640px;
+      margin: 20px auto 40px;
+      padding: 0 24px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      width: 100%;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 48px 40px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .header {
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 10px;
+      font-size: clamp(24px, 4vw, 32px);
+      font-weight: 800;
+      line-height: 1.25;
+      color: #0f172a;
+      letter-spacing: -0.7px;
+    }
+
+    .subtitle {
+      max-width: 480px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .progress-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      transition: all 0.25s ease;
+    }
+
+    .progress-dot.active {
+      background: #0f172a;
+      width: 28px;
+      border-radius: 9999px;
+    }
+
+    .progress-dot.complete {
+      background: #14b8a6;
+    }
+
+    .step {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    input {
+      width: 100%;
+      min-height: 54px;
+      padding: 0 18px;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      outline: none;
+      background: #ffffff;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus {
+      border-color: #0f172a;
+      box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.08);
+    }
+
+    input:disabled {
+      background: #f1f5f9;
+      color: #64748b;
+      cursor: not-allowed;
+    }
+
+    .hint {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .message {
+      display: none;
+      margin: 14px 0;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .message.visible {
+      display: block;
+    }
+
+    .message.error {
+      border: 1px solid #fecaca;
+      background: var(--error-bg);
+      color: var(--error);
+    }
+
+    .message.success {
+      border: 1px solid #bbf7d0;
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .button {
+      width: 100%;
+      min-height: 54px;
+      margin-top: 10px;
+      padding: 0 24px;
+      border-radius: 9999px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .button-primary {
+      border: 0;
+      background: #0f172a;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+    }
+
+    .button-primary:hover:not(:disabled) {
+      background: #1e293b;
+      transform: translateY(-2px);
+    }
+
+    .button-secondary {
+      border: 2px solid var(--border);
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .button-secondary:hover:not(:disabled) {
+      border-color: #94a3b8;
+      background: #f8fafc;
+      transform: translateY(-2px);
+    }
+
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      background: #94a3b8;
+      box-shadow: none;
+    }
+
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .details {
+      margin: 24px 0;
+      border-radius: 20px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-row:last-child {
+      border-bottom: 0;
+    }
+
+    .detail-label {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .detail-value {
+      text-align: right;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .success-screen {
+      text-align: center;
+    }
+
+    .success-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .abha-id {
+      margin: 24px 0 8px;
+      padding: 18px 24px;
+      border-radius: 16px;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-family: 'Poppins', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .address {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 36px 22px;
+        border-radius: 22px;
+      }
+      .detail-row {
+        flex-direction: column;
+        gap: 4px;
+      }
+      .detail-value {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <span class="announcement-badge"></span>
+    <span>Your health data, always accessible — National ABDM Integration</span>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <span class="brand-title">PulseTag</span>
+    </a>
+    <a href="abha-status.html" class="nav-link">Cancel</a>
+  </nav>
+
+  <main class="page">
+    <section class="card" aria-live="polite">
+      <header class="header">
+        <h1 id="pageTitle"></h1>
+        <p id="pageSubtitle" class="subtitle"></p>
+      </header>
+
+      <div id="progress" class="progress" aria-label="Progress">
+        <span class="progress-dot" data-step="1"></span>
+        <span class="progress-dot" data-step="2"></span>
+        <span class="progress-dot" data-step="3"></span>
+        <span class="progress-dot" data-step="4"></span>
+      </div>
+
+      <div id="stepContainer"></div>
+    </section>
+  </main>
+
+  <script>
+    let step = 1;
+
+    let aadhaar = "";
+    let otpAttempts = 0;
+    let verifying = false;
+
+    const CORRECT_OTP = "123456";
+    const MAX_OTP_ATTEMPTS = 3;
+
+    const pageTitle = document.getElementById("pageTitle");
+    const pageSubtitle = document.getElementById("pageSubtitle");
+    const stepContainer = document.getElementById("stepContainer");
+    const progressDots = document.querySelectorAll(".progress-dot");
+
+    function t(key, fallback) {
+      try {
+        if (
+          typeof translations !== "undefined" &&
+          typeof getState === "function"
+        ) {
+          const language = getState().language || "en";
+          const value = translations[language]?.[key];
+
+          if (value) {
+            return value;
+          }
+        }
+      } catch (error) {
+        // Use fallback.
+      }
+
+      return fallback;
+    }
+
+    function updateProgress() {
+      progressDots.forEach((dot) => {
+        const dotStep = Number(dot.dataset.step);
+
+        dot.classList.toggle("active", dotStep === step);
+        dot.classList.toggle("complete", dotStep < step);
+      });
+    }
+
+    function setHeader(title, subtitle) {
+      pageTitle.textContent = title;
+      pageSubtitle.textContent = subtitle;
+    }
+
+    function renderStep() {
+      updateProgress();
+
+      if (step === 1) {
+        renderAadhaarStep();
+      } else if (step === 2) {
+        renderOtpStep();
+      } else if (step === 3) {
+        renderDetailsStep();
+      } else if (step === 4) {
+        renderSuccessStep();
+      }
+    }
+
+    function renderAadhaarStep() {
+      setHeader(
+        t("abhaCreate.step1Title", "Create your ABHA ID"),
+        t(
+          "abhaCreate.step1Subtitle",
+          "Enter your 12-digit Aadhaar number to begin."
+        )
+      );
+
+      stepContainer.innerHTML = `
+        <form id="aadhaarForm" class="step" novalidate>
+          <div class="field">
+            <label for="aadhaar">
+              ${t("abhaCreate.aadhaarLabel", "Aadhaar number")}
+            </label>
+
+            <input
+              id="aadhaar"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              maxlength="12"
+              placeholder="${t(
+                "abhaCreate.aadhaarPlaceholder",
+                "12-digit Aadhaar number"
+              )}"
+              required
+            >
+
+            <div class="hint">
+              ${t(
+                "abhaCreate.aadhaarHint",
+                "Your Aadhaar number is used only for this mock verification flow."
+              )}
+            </div>
+
+            <div
+              id="aadhaarMessage"
+              class="message"
+              role="alert"
+              aria-live="polite"
+            ></div>
+          </div>
+
+          <button class="button button-primary" type="submit">
+            ${t("abhaCreate.continue", "Continue")}
+          </button>
+        </form>
+      `;
+
+      const form = document.getElementById("aadhaarForm");
+      const input = document.getElementById("aadhaar");
+      const message = document.getElementById("aadhaarMessage");
+
+      input.value = aadhaar;
+
+      input.addEventListener("input", () => {
+        input.value = input.value
+          .replace(/\D/g, "")
+          .slice(0, 12);
+
+        message.className = "message";
+        message.textContent = "";
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const value = input.value.trim();
+
+        if (!/^\d{12}$/.test(value)) {
+          message.textContent = t(
+            "abhaCreate.invalidAadhaar",
+            "Please enter a valid 12-digit Aadhaar number."
+          );
+
+          message.className = "message visible error";
+          input.focus();
+          return;
+        }
+
+        aadhaar = value;
+        step = 2;
+        renderStep();
+      });
+
+      input.focus();
+    }
+
+    function mockOtpCheck(otp) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (otp === CORRECT_OTP) {
+            resolve({ success: true });
+          } else {
+            reject(new Error("Invalid OTP"));
+          }
+        }, 800);
+      });
+    }
+
+    function renderOtpStep() {
+      setHeader(
+        t("abhaCreate.step2Title", "Verify Aadhaar OTP"),
+        t(
+          "abhaCreate.step2Subtitle",
+          "Enter the 6-digit OTP sent to your registered mobile number."
+        )
+      );
+
+      stepContainer.innerHTML = `
+        <form id="abhaOtpForm" class="step" novalidate>
+          <div class="field">
+            <label for="abhaOtp">
+              ${t("abhaCreate.otpLabel", "One-time password")}
+            </label>
+
+            <input
+              id="abhaOtp"
+              type="text"
+              inputmode="numeric"
+              autocomplete="one-time-code"
+              maxlength="6"
+              placeholder="${t(
+                "abhaCreate.otpPlaceholder",
+                "6-digit OTP"
+              )}"
+              required
+            >
+
+            <div class="hint">
+              ${t(
+                "abhaCreate.otpHint",
+                "For this demo, use 123456."
+              )}
+            </div>
+
+            <div
+              id="otpMessage"
+              class="message"
+              role="alert"
+              aria-live="polite"
+            ></div>
+          </div>
+
+          <button
+            id="verifyOtpButton"
+            class="button button-primary"
+            type="submit"
+          >
+            ${t("abhaCreate.verify", "Verify OTP")}
+          </button>
+
+          <button
+            id="backToAadhaar"
+            class="button button-secondary"
+            type="button"
+          >
+            ${t("abhaCreate.back", "Back")}
+          </button>
+        </form>
+      `;
+
+      const form = document.getElementById("abhaOtpForm");
+      const input = document.getElementById("abhaOtp");
+      const message = document.getElementById("otpMessage");
+      const verifyButton = document.getElementById("verifyOtpButton");
+      const backButton = document.getElementById("backToAadhaar");
+
+      input.addEventListener("input", () => {
+        input.value = input.value
+          .replace(/\D/g, "")
+          .slice(0, 6);
+
+        message.className = "message";
+        message.textContent = "";
+      });
+
+      backButton.addEventListener("click", () => {
+        step = 1;
+        renderStep();
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (verifying) return;
+
+        const otp = input.value.trim();
+
+        if (!/^\d{6}$/.test(otp)) {
+          message.textContent = t(
+            "abhaCreate.invalidOtp",
+            "Please enter the 6-digit OTP."
+          );
+
+          message.className = "message visible error";
+          input.focus();
+          return;
+        }
+
+        if (otpAttempts >= MAX_OTP_ATTEMPTS) {
+          message.textContent = t(
+            "abhaCreate.tooManyAttempts",
+            "Too many incorrect attempts. Please start again."
+          );
+
+          message.className = "message visible error";
+          return;
+        }
+
+        verifying = true;
+        verifyButton.disabled = true;
+
+        verifyButton.innerHTML = `
+          <span class="loading">
+            <span class="spinner" aria-hidden="true"></span>
+            <span>
+              ${t("abhaCreate.verifying", "Verifying...")}
+            </span>
+          </span>
+        `;
+
+        try {
+          await mockOtpCheck(otp);
+
+          verifying = false;
+          step = 3;
+          renderStep();
+        } catch (error) {
+          otpAttempts++;
+          verifying = false;
+          verifyButton.disabled = false;
+
+          verifyButton.textContent = t(
+            "abhaCreate.verify",
+            "Verify OTP"
+          );
+
+          input.value = "";
+
+          if (otpAttempts >= MAX_OTP_ATTEMPTS) {
+            message.textContent = t(
+              "abhaCreate.tooManyAttempts",
+              "Too many incorrect attempts. Please start again."
+            );
+
+            verifyButton.disabled = true;
+          } else {
+            const remaining = MAX_OTP_ATTEMPTS - otpAttempts;
+
+            message.textContent = t(
+              "abhaCreate.wrongOtp",
+              `Incorrect OTP. ${remaining} attempt(s) remaining.`
+            ).replace("{attempts}", remaining);
+          }
+
+          message.className = "message visible error";
+          input.focus();
+        }
+      });
+
+      input.focus();
+    }
+
+    function getMockDetails() {
+      return {
+        name: "Priya Sharma",
+        dob: "14 March 1998"
+      };
+    }
+
+    function renderDetailsStep() {
+      const details = getMockDetails();
+
+      setHeader(
+        t("abhaCreate.step3Title", "Confirm your details"),
+        t(
+          "abhaCreate.step3Subtitle",
+          "These details were retrieved from the mock Aadhaar verification."
+        )
+      );
+
+      stepContainer.innerHTML = `
+        <div class="step">
+          <div class="details">
+            <div class="detail-row">
+              <span class="detail-label">
+                ${t("abhaCreate.name", "Name")}
+              </span>
+
+              <span class="detail-value">
+                ${details.name}
+              </span>
+            </div>
+
+            <div class="detail-row">
+              <span class="detail-label">
+                ${t("abhaCreate.dob", "Date of birth")}
+              </span>
+
+              <span class="detail-value">
+                ${details.dob}
+              </span>
+            </div>
+          </div>
+
+          <div
+            id="detailsMessage"
+            class="message"
+            role="alert"
+            aria-live="polite"
+          ></div>
+
+          <button
+            id="confirmDetails"
+            class="button button-primary"
+            type="button"
+          >
+            ${t("abhaCreate.confirm", "Confirm & Generate ID")}
+          </button>
+
+          <button
+            id="backToOtp"
+            class="button button-secondary"
+            type="button"
+          >
+            ${t("abhaCreate.back", "Back")}
+          </button>
+        </div>
+      `;
+
+      document
+        .getElementById("confirmDetails")
+        .addEventListener("click", () => {
+          step = 4;
+          renderStep();
+        });
+
+      document
+        .getElementById("backToOtp")
+        .addEventListener("click", () => {
+          step = 2;
+          renderStep();
+        });
+    }
+
+    function generateFakeAbhaId() {
+      const first = Math.floor(1000 + Math.random() * 9000);
+      const second = Math.floor(1000 + Math.random() * 9000);
+      const third = Math.floor(1000 + Math.random() * 9000);
+
+      return `${first}-${second}-${third}`;
+    }
+
+    function renderSuccessStep() {
+      const generatedId = generateFakeAbhaId();
+      const generatedAddress =
+        `priya${Math.floor(100 + Math.random() * 900)}@abdm`;
+
+      setHeader(
+        t("abhaCreate.step4Title", "ABHA ID created"),
+        t(
+          "abhaCreate.step4Subtitle",
+          "Your mock ABHA ID has been created successfully."
+        )
+      );
+
+      progressDots.forEach((dot) => {
+        dot.classList.remove("active");
+        dot.classList.add("complete");
+      });
+
+      stepContainer.innerHTML = `
+        <div class="step success-screen">
+          <div class="success-icon" aria-hidden="true">✓</div>
+
+          <p class="subtitle">
+            ${t(
+              "abhaCreate.successText",
+              "Your ABHA identity is now ready to use with PulseTag."
+            )}
+          </p>
+
+          <div class="abha-id">
+            ${generatedId}
+          </div>
+
+          <p class="address">
+            ${generatedAddress}
+          </p>
+
+          <button
+            id="continueButton"
+            class="button button-primary"
+            type="button"
+          >
+            ${t("abhaCreate.continueToProfile", "Continue to Emergency Profile")}
+          </button>
+        </div>
+      `;
+
+      updateState({
+        abha: {
+          linked: true,
+          id: generatedId
+        }
+      });
+
+      document
+        .getElementById("continueButton")
+        .addEventListener("click", () => {
+          window.location.href = "emergency-profile.html";
+        });
+    }
+
+    try {
+      const state = getState();
+
+      if (state?.language) {
+        setLanguage(state.language);
+      }
+    } catch (error) {
+      // Continue with the default English strings.
+    }
+
+    renderStep();
+  </script>
+</body>
+</html>

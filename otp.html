@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PulseTag — Verify OTP</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="state.js"></script>
+  <script src="i18n.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #0f172a;
+      --primary-dark: #020617;
+      --accent-teal: #14b8a6;
+      --teal-bg: #e6f7f5;
+      --teal-text: #0f766e;
+      --hero-bg: #e8f4f8;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --white: #ffffff;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+      --success: #15803d;
+      --success-bg: #f0fdf4;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--hero-bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Announcement Bar */
+    .announcement-bar {
+      background: var(--teal-bg);
+      color: var(--teal-text);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .announcement-badge {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--accent-teal);
+      border-radius: 50%;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .nav-link {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* Page Main Container */
+    .page {
+      width: 100%;
+      max-width: 580px;
+      margin: 20px auto 40px;
+      padding: 0 24px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      width: 100%;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 48px 40px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .header {
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .step-pill {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 10px;
+      font-size: clamp(26px, 4.5vw, 34px);
+      font-weight: 800;
+      line-height: 1.25;
+      color: #0f172a;
+      letter-spacing: -0.7px;
+    }
+
+    .subtitle {
+      max-width: 440px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .phone-number {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 14px;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .form {
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .field {
+      margin-bottom: 22px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+    }
+
+    .otp-input {
+      width: 100%;
+      min-height: 60px;
+      padding: 0 16px;
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      outline: none;
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: 'Poppins', monospace, sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 12px;
+      text-align: center;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .otp-input:focus {
+      border-color: #0f172a;
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.08);
+    }
+
+    .otp-input:disabled {
+      background: #f1f5f9;
+      cursor: not-allowed;
+      color: var(--muted);
+    }
+
+    .message {
+      display: none;
+      margin: 14px 0;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .message.visible {
+      display: block;
+    }
+
+    .message.error {
+      border: 1px solid #fecaca;
+      background: var(--error-bg);
+      color: var(--error);
+    }
+
+    .message.success {
+      border: 1px solid #bbf7d0;
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .verify-button {
+      width: 100%;
+      min-height: 54px;
+      margin-top: 8px;
+      border: 0;
+      border-radius: 9999px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+    }
+
+    .verify-button:hover:not(:disabled) {
+      background: #1e293b;
+      transform: translateY(-2px);
+    }
+
+    .verify-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      background: #94a3b8;
+      box-shadow: none;
+    }
+
+    .resend-area {
+      margin-top: 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .resend-button {
+      margin-top: 8px;
+      padding: 6px 12px;
+      border: 0;
+      background: transparent;
+      color: #0f172a;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .resend-button:hover:not(:disabled) {
+      color: #334155;
+    }
+
+    .resend-button:disabled {
+      color: var(--muted);
+      cursor: not-allowed;
+      text-decoration: none;
+    }
+
+    .demo-badge {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 12px;
+      color: #0f766e;
+      background: #e6f7f5;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-weight: 600;
+    }
+
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 36px 22px;
+        border-radius: 22px;
+      }
+      .otp-input {
+        font-size: 24px;
+        letter-spacing: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <span class="announcement-badge"></span>
+    <span>Your health data, always accessible — Step 2 of Setup</span>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <span class="brand-title">PulseTag</span>
+    </a>
+    <a href="login.html" class="nav-link">Change Number</a>
+  </nav>
+
+  <main class="page">
+    <section class="card" aria-labelledby="page-title">
+      <header class="header">
+        <span class="step-pill">Verification</span>
+
+        <h1 id="page-title" data-i18n="otp.title">
+          Verify your mobile number
+        </h1>
+
+        <p class="subtitle" data-i18n="otp.subtitle">
+          Enter the 6-digit OTP sent to your mobile number.
+        </p>
+
+        <div id="phoneNumber" class="phone-number"></div>
+      </header>
+
+      <form id="otpForm" class="form" novalidate>
+        <div class="field">
+          <label for="otp" data-i18n="otp.label">
+            One-time password
+          </label>
+
+          <input
+            id="otp"
+            class="otp-input"
+            type="text"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            maxlength="6"
+            pattern="[0-9]{6}"
+            aria-describedby="message"
+            aria-label="6-digit OTP"
+            placeholder="······"
+            required
+          >
+
+          <div
+            id="message"
+            class="message"
+            role="alert"
+            aria-live="polite"
+          ></div>
+        </div>
+
+        <button
+          id="verifyButton"
+          class="verify-button"
+          type="submit"
+          data-i18n="otp.verify"
+        >
+          Verify OTP
+        </button>
+
+        <div class="resend-area">
+          <span data-i18n="otp.noCode">
+            Didn't receive the code?
+          </span>
+          <br>
+          <button
+            id="resendButton"
+            class="resend-button"
+            type="button"
+            disabled
+          >
+            Resend OTP
+          </button>
+          <br>
+          <span class="demo-badge">💡 Demo OTP: 123456</span>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const otpForm = document.getElementById("otpForm");
+    const otpInput = document.getElementById("otp");
+    const verifyButton = document.getElementById("verifyButton");
+    const resendButton = document.getElementById("resendButton");
+    const message = document.getElementById("message");
+    const phoneNumber = document.getElementById("phoneNumber");
+
+    const CORRECT_OTP = "123456";
+    const LOCKOUT_LIMIT = 3;
+    const COUNTDOWN_SECONDS = 30;
+
+    let wrongAttempts = 0;
+    let lockoutTimer = null;
+    let resendTimer = null;
+    let verifying = false;
+    let resendAvailable = false;
+
+    /*
+     * Translation helper.
+     */
+    function t(key, fallback) {
+      try {
+        if (
+          typeof translations !== "undefined" &&
+          typeof getState === "function"
+        ) {
+          const language = getState().language || "en";
+          const value = translations[language]?.[key];
+
+          if (value) {
+            return value;
+          }
+        }
+      } catch (error) {
+        console.warn("Translation unavailable:", error);
+      }
+
+      return fallback;
+    }
+
+    /*
+     * Display an inline message.
+     */
+    function showMessage(text, type = "error") {
+      message.textContent = text;
+      message.className = `message visible ${type}`;
+    }
+
+    function clearMessage() {
+      message.textContent = "";
+      message.className = "message";
+    }
+
+    /*
+     * Get phone number saved by login.html.
+     */
+    function getSavedPhone() {
+      try {
+        const state = getState();
+        return state?.phone || "";
+      } catch (error) {
+        return "";
+      }
+    }
+
+    /*
+     * Format the Indian phone number for display.
+     */
+    function formatPhone(phone) {
+      if (!phone) {
+        return "";
+      }
+
+      return `+91 ${phone.slice(0, 5)} ${phone.slice(5)}`;
+    }
+
+    /*
+     * Mock OTP verification.
+     */
+    function verifyOtpMock(otp) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (otp === CORRECT_OTP) {
+            resolve({ success: true });
+          } else {
+            reject(new Error("Invalid OTP"));
+          }
+        }, 800);
+      });
+    }
+
+    /*
+     * Mock resend.
+     */
+    function resendOtpMock() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ success: true });
+        }, 700);
+      });
+    }
+
+    /*
+     * Check whether the user is locked out.
+     */
+    function isLockedOut() {
+      return wrongAttempts >= LOCKOUT_LIMIT;
+    }
+
+    /*
+     * Set loading state on Verify button.
+     */
+    function setVerifyLoading(loading) {
+      verifying = loading;
+
+      verifyButton.disabled =
+        loading || isLockedOut();
+
+      if (loading) {
+        verifyButton.innerHTML = `
+          <span class="loading">
+            <span
+              class="spinner"
+              aria-hidden="true"
+            ></span>
+
+            <span>
+              ${t("otp.verifying", "Verifying...")}
+            </span>
+          </span>
+        `;
+      } else {
+        verifyButton.textContent =
+          t("otp.verify", "Verify OTP");
+      }
+    }
+
+    /*
+     * Start the 30-second lockout.
+     */
+    function startLockoutCountdown() {
+      if (lockoutTimer) {
+        clearInterval(lockoutTimer);
+      }
+
+      let remaining = COUNTDOWN_SECONDS;
+
+      otpInput.disabled = true;
+      verifyButton.disabled = true;
+
+      function updateLockoutMessage() {
+        const text = t(
+          "otp.locked",
+          "Too many incorrect attempts. Try again in {seconds} seconds."
+        );
+
+        showMessage(
+          text.replace("{seconds}", remaining),
+          "error"
+        );
+      }
+
+      updateLockoutMessage();
+
+      lockoutTimer = setInterval(() => {
+        remaining--;
+
+        if (remaining <= 0) {
+          clearInterval(lockoutTimer);
+          lockoutTimer = null;
+
+          wrongAttempts = 0;
+
+          otpInput.disabled = false;
+          otpInput.value = "";
+
+          verifyButton.disabled = false;
+
+          clearMessage();
+
+          otpInput.focus();
+
+          return;
+        }
+
+        updateLockoutMessage();
+
+      }, 1000);
+    }
+
+    /*
+     * Start resend 30-second countdown.
+     */
+    function startResendCountdown() {
+      if (resendTimer) {
+        clearInterval(resendTimer);
+      }
+
+      let remaining = COUNTDOWN_SECONDS;
+
+      resendAvailable = false;
+      resendButton.disabled = true;
+
+      function updateResendButton() {
+        resendButton.textContent =
+          t(
+            "otp.resendIn",
+            "Resend OTP in {seconds}s"
+          ).replace(
+            "{seconds}",
+            remaining
+          );
+      }
+
+      updateResendButton();
+
+      resendTimer = setInterval(() => {
+        remaining--;
+
+        if (remaining <= 0) {
+          clearInterval(resendTimer);
+          resendTimer = null;
+
+          resendAvailable = true;
+          resendButton.disabled = false;
+
+          resendButton.textContent =
+            t("otp.resend", "Resend OTP");
+
+          return;
+        }
+
+        updateResendButton();
+
+      }, 1000);
+    }
+
+    /*
+     * Allow digits only.
+     */
+    otpInput.addEventListener("input", () => {
+      otpInput.value = otpInput.value
+        .replace(/\D/g, "")
+        .slice(0, 6);
+
+      if (message.classList.contains("visible")) {
+        clearMessage();
+      }
+    });
+
+    /*
+     * Verify OTP.
+     */
+    otpForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (verifying || isLockedOut()) {
+        return;
+      }
+
+      clearMessage();
+
+      const otp = otpInput.value.trim();
+
+      if (!/^\d{6}$/.test(otp)) {
+        showMessage(
+          t(
+            "otp.invalidLength",
+            "Please enter the 6-digit OTP."
+          ),
+          "error"
+        );
+
+        otpInput.focus();
+        return;
+      }
+
+      setVerifyLoading(true);
+
+      try {
+        await verifyOtpMock(otp);
+
+        updateState({
+          otpVerified: true
+        });
+
+        window.location.href = "abha-status.html";
+
+      } catch (error) {
+        wrongAttempts++;
+
+        setVerifyLoading(false);
+
+        otpInput.value = "";
+        otpInput.focus();
+
+        if (wrongAttempts >= LOCKOUT_LIMIT) {
+          startLockoutCountdown();
+        } else {
+          const remaining =
+            LOCKOUT_LIMIT - wrongAttempts;
+
+          showMessage(
+            t(
+              "otp.wrong",
+              "Incorrect OTP. {attempts} attempt(s) remaining."
+            ).replace(
+              "{attempts}",
+              remaining
+            ),
+            "error"
+          );
+        }
+      }
+    });
+
+    /*
+     * Resend OTP.
+     */
+    resendButton.addEventListener("click", async () => {
+      if (
+        !resendAvailable ||
+        resendButton.disabled
+      ) {
+        return;
+      }
+
+      resendButton.disabled = true;
+
+      try {
+        await resendOtpMock();
+
+        otpInput.value = "";
+        clearMessage();
+
+        showMessage(
+          t(
+            "otp.resent",
+            "A new OTP has been sent."
+          ),
+          "success"
+        );
+
+        startResendCountdown();
+        otpInput.focus();
+
+      } catch (error) {
+        resendButton.disabled = false;
+
+        showMessage(
+          t(
+            "otp.resendError",
+            "Unable to resend OTP. Please try again."
+          ),
+          "error"
+        );
+      }
+    });
+
+    /*
+     * Initialize the page.
+     */
+    try {
+      const state = getState();
+
+      if (state?.language) {
+        setLanguage(state.language);
+      }
+
+      if (state?.phone) {
+        phoneNumber.textContent =
+          formatPhone(state.phone);
+      }
+
+      startResendCountdown();
+      otpInput.focus();
+
+    } catch (error) {
+      console.error(
+        "OTP page initialization failed:",
+        error
+      );
+      startResendCountdown();
+    }
+  </script>
+</body>
+</html>
