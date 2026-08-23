@@ -389,6 +389,25 @@
         grid-template-columns: 1fr;
       }
     }
+    @media (max-width: 768px) {
+      html, body { width: 100%; overflow-x: hidden; }
+      .navbar { flex-wrap: wrap; gap: 12px 20px; padding: 16px 20px; }
+      .nav-links { flex-wrap: wrap; gap: 10px 14px; min-width: 0; }
+      .brand, .page, .card, .content, form { min-width: 0; width: 100%; }
+      .dashboard-content { padding: 44px 20px; }
+      .hero { padding: 36px 28px; }
+      h1, .hero h1 { font-size: clamp(24px, 7vw, 36px); }
+      img, svg, canvas, video { max-width: 100%; }
+      button, input, select, textarea { max-width: 100%; }
+    }
+    @media (max-width: 480px) {
+      .navbar { padding: 14px 16px; }
+      .nav-links { width: 100%; justify-content: flex-start; }
+      .hero { padding: 28px 20px; border-radius: 22px; }
+      .dashboard-content { padding: 36px 16px; }
+      h1, .hero h1 { font-size: clamp(23px, 8vw, 30px); }
+      .hero-action, .tile-action-btn { width: 100%; justify-content: center; }
+    }
   </style>
 </head>
 <body>

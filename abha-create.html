@@ -411,6 +411,23 @@
         text-align: left;
       }
     }
+    @media (max-width: 768px) {
+      html, body { width: 100%; overflow-x: hidden; }
+      .navbar { flex-wrap: wrap; gap: 12px 20px; padding: 16px 20px; }
+      .brand, .page, .card, .content, form { min-width: 0; width: 100%; }
+      .page { padding: 0 16px; }
+      .card, .content { padding: 36px 24px; }
+      h1 { font-size: clamp(24px, 7vw, 34px); }
+      img, svg, canvas, video { max-width: 100%; }
+      button, input, select, textarea { max-width: 100%; }
+    }
+    @media (max-width: 480px) {
+      .navbar { padding: 14px 16px; }
+      .nav-link { margin-left: 0; overflow-wrap: anywhere; }
+      .card, .content { padding: 28px 16px; border-radius: 20px; }
+      h1 { font-size: clamp(23px, 8vw, 30px); }
+      .button, button, input, select, textarea { width: 100%; }
+    }
   </style>
 </head>
 <body>

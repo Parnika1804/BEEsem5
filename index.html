@@ -616,6 +616,25 @@
         align-items: flex-start;
       }
     }
+    @media (max-width: 768px) {
+      html, body { width: 100%; overflow-x: hidden; }
+      .navbar { flex-wrap: wrap; gap: 12px 20px; padding: 16px 20px; }
+      .nav-links { flex-wrap: wrap; gap: 10px 14px; min-width: 0; }
+      .hero-container, .cards-container, .showcase-container, .reassurance-container {
+        width: 100%;
+        min-width: 0;
+      }
+      .hero, .feature-card, .showcase-card, .reassurance-card { min-width: 0; }
+      h1, .hero h1 { font-size: clamp(24px, 7vw, 38px); }
+      img, svg, canvas, video { max-width: 100%; }
+      button, input, select, textarea { max-width: 100%; }
+    }
+    @media (max-width: 480px) {
+      .navbar { padding: 14px 16px; }
+      .nav-links { width: 100%; justify-content: flex-start; }
+      .hero, .feature-card, .showcase-card, .reassurance-card { border-radius: 20px; }
+      h1, .hero h1 { font-size: clamp(23px, 8vw, 32px); }
+    }
   </style>
 </head>
 <body>
