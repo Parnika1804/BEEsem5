@@ -1,0 +1,235 @@
+:root {
+  --theme-page: #ffffff;
+  --theme-surface: #ffffff;
+  --theme-surface-alt: #f8fafc;
+  --theme-text: #1e293b;
+  --theme-heading: #0f172a;
+  --theme-muted: #64748b;
+  --theme-border: #e2e8f0;
+  --theme-control: #f1f5f9;
+  --theme-control-hover: #e2e8f0;
+  --theme-shadow: rgba(15, 23, 42, 0.08);
+  --theme-focus: #0f766e;
+  --theme-danger-bg: #fff1f2;
+  --theme-danger-text: #991b1b;
+  --theme-success-bg: #f0fdf4;
+  --theme-success-text: #166534;
+}
+
+:root[data-theme="dark"] {
+  --theme-page: #101827;
+  --theme-surface: #182334;
+  --theme-surface-alt: #202d40;
+  --theme-text: #e5edf5;
+  --theme-heading: #f8fafc;
+  --theme-muted: #a9b8c9;
+  --theme-border: #3b4b61;
+  --theme-control: #243247;
+  --theme-control-hover: #314158;
+  --theme-shadow: rgba(0, 0, 0, 0.28);
+  --theme-focus: #5eead4;
+  --theme-danger-bg: #3a2028;
+  --theme-danger-text: #fecdd3;
+  --theme-success-bg: #19352b;
+  --theme-success-text: #bbf7d0;
+}
+
+html,
+body {
+  background-color: var(--theme-page) !important;
+  color: var(--theme-text) !important;
+}
+
+body,
+.navbar,
+.card,
+.content,
+.cluster-card,
+.upload,
+.emergency-section,
+.vault-section,
+.modal,
+.dropdown,
+table,
+.table-wrapper {
+  background-color: var(--theme-surface) !important;
+}
+
+.hero-section,
+.hero-wrapper,
+.page,
+.section,
+.emergency-item,
+.vault-list,
+.info-box,
+.hint,
+.trust-strip {
+  background-color: var(--theme-surface-alt) !important;
+}
+
+.announcement-bar {
+  background-color: var(--teal-bg) !important;
+  color: var(--teal-text) !important;
+}
+
+.brand,
+.brand-title,
+h1,
+h2,
+h3,
+h4,
+.hero-heading,
+.section-heading,
+.card-title,
+label,
+th,
+strong {
+  color: var(--theme-heading) !important;
+}
+
+p,
+.subtitle,
+.hero-subtext,
+.nav-link,
+.section-description,
+.hint,
+td,
+small {
+  color: var(--theme-muted) !important;
+}
+
+.nav-link:hover,
+a:hover {
+  color: var(--theme-heading) !important;
+}
+
+.logo-icon,
+.button-primary,
+.submit-btn,
+.verify-button,
+.save-button,
+.continue-btn,
+.get-started,
+.hero-action,
+.button-primary:hover:not(:disabled),
+.submit-btn:hover:not(:disabled),
+.verify-button:hover:not(:disabled),
+.save-button:hover:not(:disabled),
+.continue-btn:not(:disabled):hover {
+  background-color: var(--primary) !important;
+  color: #ffffff !important;
+}
+
+.nav-btn,
+.button-secondary,
+.nav-btn:hover,
+.button-secondary:hover,
+.resend-button,
+.upload-button {
+  background-color: var(--theme-control) !important;
+  color: var(--theme-heading) !important;
+}
+
+button,
+input,
+select,
+textarea,
+.upload,
+.card,
+.cluster-card,
+.section,
+.emergency-section,
+.vault-section,
+table,
+th,
+td {
+  border-color: var(--theme-border) !important;
+}
+
+input,
+select,
+textarea {
+  background-color: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--theme-muted) !important;
+  opacity: 0.85;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus-visible,
+a:focus-visible {
+  outline-color: var(--theme-focus) !important;
+  border-color: var(--theme-focus) !important;
+}
+
+input:disabled,
+button:disabled,
+select:disabled,
+textarea:disabled {
+  background-color: var(--theme-control) !important;
+  color: var(--theme-muted) !important;
+  opacity: 0.7;
+}
+
+[role="alert"],
+.error,
+.access-error {
+  background-color: var(--theme-danger-bg) !important;
+  color: var(--theme-danger-text) !important;
+}
+
+.success,
+.status-pill,
+.success-message {
+  background-color: var(--theme-success-bg) !important;
+  color: var(--theme-success-text) !important;
+}
+
+svg,
+.icon,
+button svg {
+  color: currentColor;
+}
+
+.theme-toggle {
+  appearance: none;
+  border: 1px solid var(--theme-border);
+  border-radius: 9999px;
+  background: var(--theme-control);
+  color: var(--theme-heading);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  background: var(--theme-control-hover);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--theme-focus);
+  outline-offset: 2px;
+}
+
+:root[data-theme="dark"] .section.health,
+:root[data-theme="dark"] .section.allergies,
+:root[data-theme="dark"] .section.meds,
+:root[data-theme="dark"] .section.contact,
+:root[data-theme="dark"] .section.vault,
+:root[data-theme="dark"] .emergency-section {
+  background: var(--theme-surface-alt) !important;
+}
+
+:root[data-theme="dark"] .wave-divider .shape-fill {
+  fill: var(--theme-surface-alt) !important;
+}
