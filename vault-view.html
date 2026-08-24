@@ -307,7 +307,42 @@
       font-size: 14px;
     }
 
-    .access-error {
+    /* Doctor History Section */
+    .doctor-history-section {
+      margin-top: 28px;
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+    }
+
+    .doctor-visit-card {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .doctor-visit-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: #0f172a;
+    }
+
+    .doctor-visit-meta {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .doctor-visit-notes {
+      font-size: 13px;
+      color: var(--text);
+      padding-top: 4px;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
       display: none;
       padding: 32px 24px;
       border-radius: 20px;
@@ -448,6 +483,14 @@
           <div id="documentList" class="document-list"></div>
         </section>
 
+        <section class="doctor-history-section" aria-labelledby="doctorHistoryHeading">
+          <div class="vault-heading">
+            <h2 id="doctorHistoryHeading">Doctor Visit History</h2>
+            <p>Past consultations and specialist visits on record.</p>
+          </div>
+          <div id="doctorHistoryList" class="document-list"></div>
+        </section>
+
         <a class="back" href="home.html">← Return to PulseTag Home</a>
       </div>
     </section>
@@ -529,6 +572,49 @@
         row.append(preview, text);
         documentList.appendChild(row);
       });
+
+      // Doctor visit history
+      const doctorHistoryList = document.getElementById("doctorHistoryList");
+      const doctorHistory = Array.isArray(state.doctorHistory) ? state.doctorHistory : [];
+      const sortedVisits = [...doctorHistory].sort((a, b) =>
+        a.visitDate < b.visitDate ? 1 : a.visitDate > b.visitDate ? -1 : 0
+      );
+
+      if (!sortedVisits.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "No visit history on record.";
+        doctorHistoryList.appendChild(empty);
+      } else {
+        sortedVisits.forEach((entry) => {
+          const card = document.createElement("div");
+          card.className = "doctor-visit-card";
+
+          const name = document.createElement("div");
+          name.className = "doctor-visit-name";
+          name.textContent = entry.doctorName || "";
+          card.appendChild(name);
+
+          const meta = document.createElement("div");
+          meta.className = "doctor-visit-meta";
+          const parts = [];
+          if (entry.specialty) parts.push(entry.specialty);
+          if (entry.hospital) parts.push(entry.hospital);
+          if (entry.visitDate) parts.push(formatDate(entry.visitDate));
+          if (entry.contact) parts.push(entry.contact);
+          meta.textContent = parts.join(" · ");
+          card.appendChild(meta);
+
+          if (entry.notes) {
+            const notes = document.createElement("div");
+            notes.className = "doctor-visit-notes";
+            notes.textContent = entry.notes;
+            card.appendChild(notes);
+          }
+
+          doctorHistoryList.appendChild(card);
+        });
+      }
     }
 
     function formatDate(value) {

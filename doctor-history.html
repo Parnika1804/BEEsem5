@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="theme.js"></script>
+
+  <title>PulseTag — Doctor Visit History</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="state.js"></script>
+  <script src="i18n.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #0f172a;
+      --primary-dark: #020617;
+      --accent-teal: #14b8a6;
+      --teal-bg: #e6f7f5;
+      --teal-text: #0f766e;
+      --hero-bg: #e8f4f8;
+      --card-blush: #fee2e2;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --white: #ffffff;
+      --success: #15803d;
+      --success-bg: #f0fdf4;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--hero-bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .announcement-bar {
+      background: var(--teal-bg);
+      color: var(--teal-text);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      padding: 9px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .announcement-badge {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--accent-teal);
+      border-radius: 50%;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .page {
+      width: 100%;
+      max-width: 780px;
+      margin: 20px auto 50px;
+      padding: 0 24px;
+      flex: 1;
+    }
+
+    .card {
+      width: 100%;
+      background: var(--white);
+      border-radius: 28px;
+      padding: 48px 40px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    .header {
+      margin-bottom: 36px;
+      text-align: center;
+    }
+
+    .step-pill {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      background: #f1f5f9;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      margin: 0 0 10px;
+      font-size: clamp(26px, 4.5vw, 34px);
+      font-weight: 800;
+      line-height: 1.25;
+      color: #0f172a;
+      letter-spacing: -0.7px;
+    }
+
+    .subtitle {
+      max-width: 540px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .edit-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 12px 28px;
+      border-radius: 9999px;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+
+    .edit-link:hover {
+      background: #1e293b;
+    }
+
+    .history-section-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 16px;
+    }
+
+    .empty-state {
+      padding: 36px 24px;
+      border-radius: 20px;
+      background: #f8fafc;
+      border: 1.5px dashed var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .history-card {
+      padding: 20px 24px;
+      border-radius: 20px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+
+    .history-card-name {
+      font-family: 'Poppins', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0 0 2px;
+    }
+
+    .history-card-specialty {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .history-card-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 24px;
+    }
+
+    .history-card-field {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .history-card-field strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1px;
+    }
+
+    .history-card-field a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .history-card-field a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 650px) {
+      .card { padding: 32px 18px; border-radius: 22px; }
+      .history-card-body { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      html, body { width: 100%; overflow-x: hidden; }
+      .navbar { flex-wrap: wrap; gap: 12px 20px; padding: 16px 20px; }
+      .brand, .page, .card { min-width: 0; width: 100%; }
+      .page { padding: 0 16px; }
+      .card { padding: 36px 24px; }
+      h1 { font-size: clamp(24px, 7vw, 34px); }
+    }
+
+    @media (max-width: 480px) {
+      .navbar { padding: 14px 16px; }
+      .card { padding: 28px 16px; border-radius: 20px; }
+      h1 { font-size: clamp(23px, 8vw, 30px); }
+      .edit-link { width: 100%; justify-content: center; }
+    }
+  </style>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="announcement-bar">
+    <span class="announcement-badge"></span>
+    <span data-i18n="doctorHistory.announcementBar">Your health data, always accessible — Doctor Visit History</span>
+  </div>
+
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+      </div>
+      <span class="brand-title">PulseTag</span>
+    </a>
+  </nav>
+
+  <main class="page">
+    <section class="card" aria-labelledby="page-title">
+      <header class="header">
+        <span class="step-pill" data-i18n="doctorHistory.pill">Medical Records</span>
+        <h1 id="page-title" data-i18n="doctorHistory.title">Doctor Visit History</h1>
+        <p class="subtitle" data-i18n="doctorHistory.subtitle">
+          A record of your doctor visits and consultations. To add or edit visits, update your emergency profile.
+        </p>
+        <a href="emergency-profile.html" class="edit-link" data-i18n="doctorHistory.editLink">
+          Edit in Emergency Profile →
+        </a>
+      </header>
+
+      <div>
+        <h2 class="history-section-title" data-i18n="doctorHistory.historyTitle">Past Visits</h2>
+        <div id="historyList"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function t(key, fallback) {
+      try {
+        if (typeof translations !== "undefined" && typeof getState === "function") {
+          const language = getState().language || "en";
+          const value = translations[language]?.[key];
+          if (value) return value;
+        }
+      } catch (e) { /* use fallback */ }
+      return fallback;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return "";
+      try {
+        const [year, month, day] = dateStr.split("-");
+        return new Date(Number(year), Number(month) - 1, Number(day))
+          .toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+      } catch (e) { return dateStr; }
+    }
+
+    function render() {
+      const historyList = document.getElementById("historyList");
+      let history = [];
+
+      try {
+        const state = getState();
+        if (state?.language) setLanguage(state.language);
+        history = Array.isArray(state.doctorHistory) ? state.doctorHistory : [];
+      } catch (e) { history = []; }
+
+      const sorted = [...history].sort((a, b) =>
+        a.visitDate < b.visitDate ? 1 : a.visitDate > b.visitDate ? -1 : 0
+      );
+
+      historyList.replaceChildren();
+
+      if (!sorted.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.setAttribute("data-i18n", "doctorHistory.empty");
+        empty.textContent = t("doctorHistory.empty", "No visits recorded yet. Add visits in your emergency profile.");
+        historyList.appendChild(empty);
+        return;
+      }
+
+      const list = document.createElement("div");
+      list.className = "history-list";
+
+      sorted.forEach((entry) => {
+        const card = document.createElement("div");
+        card.className = "history-card";
+
+        const name = document.createElement("p");
+        name.className = "history-card-name";
+        name.textContent = entry.doctorName || "";
+        card.appendChild(name);
+
+        if (entry.specialty) {
+          const spec = document.createElement("p");
+          spec.className = "history-card-specialty";
+          spec.textContent = entry.specialty;
+          card.appendChild(spec);
+        }
+
+        const body = document.createElement("div");
+        body.className = "history-card-body";
+
+        function makeField(labelText, valueContent) {
+          const f = document.createElement("div");
+          f.className = "history-card-field";
+          const s = document.createElement("strong");
+          s.textContent = labelText;
+          f.appendChild(s);
+          if (typeof valueContent === "string") {
+            f.appendChild(document.createTextNode(valueContent));
+          } else {
+            f.appendChild(valueContent);
+          }
+          return f;
+        }
+
+        if (entry.hospital) {
+          body.appendChild(makeField(t("doctorHistory.hospital", "Hospital / Clinic"), entry.hospital));
+        }
+
+        if (entry.contact) {
+          const link = document.createElement("a");
+          link.href = "tel:" + entry.contact;
+          link.textContent = entry.contact;
+          body.appendChild(makeField(t("doctorHistory.contact", "Contact"), link));
+        }
+
+        if (entry.visitDate) {
+          body.appendChild(makeField(t("doctorHistory.visitDate", "Visit date"), formatDate(entry.visitDate)));
+        }
+
+        if (entry.notes) {
+          const notesField = makeField(t("doctorHistory.notes", "Notes"), entry.notes);
+          notesField.style.gridColumn = "1 / -1";
+          body.appendChild(notesField);
+        }
+
+        card.appendChild(body);
+        list.appendChild(card);
+      });
+
+      historyList.appendChild(list);
+    }
+
+    render();
+  </script>
+</body>
+</html>

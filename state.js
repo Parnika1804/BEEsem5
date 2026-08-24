@@ -16,7 +16,8 @@ const defaultState = {
   },
   vault: [],
   auditLog: [],
-  consentGranted: false
+  consentGranted: false,
+  doctorHistory: []
 };
 
 const STORAGE_KEY = 'pulsetag_state';

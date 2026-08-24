@@ -180,6 +180,37 @@
     .section.meds { background: #f0fdf4; border-color: #bbf7d0; }
     .section.contact { background: #fefce8; border-color: #fef08a; }
     .section.vault { background: #f8fafc; border-color: var(--border); }
+    .section.doctors { background: #fdf4ff; border-color: #e9d5ff; }
+
+    .doctor-item {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid #e9d5ff;
+    }
+
+    .add-doctor {
+      min-height: 48px;
+      padding: 0 20px;
+      border: 2px dashed #c4b5fd;
+      border-radius: 9999px;
+      background: #ffffff;
+      color: #7c3aed;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .add-doctor:hover {
+      background: #fdf4ff;
+      border-color: #a78bfa;
+    }
 
     .section-title {
       font-family: 'Poppins', sans-serif;
@@ -683,6 +714,27 @@
           </div>
         </section>
 
+        <!-- Doctor Visit History -->
+        <section class="section doctors">
+          <h2 class="section-title" data-i18n="doctorHistory.sectionTitle">
+            Doctor visit history
+          </h2>
+          <p class="section-description" data-i18n="doctorHistory.sectionDescription">
+            Log recent doctor visits and consultations. These will be visible on your emergency profile.
+          </p>
+
+          <div id="doctorVisitList" class="medication-list"></div>
+
+          <button
+            id="addDoctorVisitButton"
+            type="button"
+            class="add-doctor"
+            data-i18n="doctorHistory.addVisit"
+          >
+            + Add doctor visit
+          </button>
+        </section>
+
         <div
           id="successMessage"
           class="success"
@@ -692,6 +744,24 @@
         >
           Emergency profile saved successfully.
         </div>
+
+        <!-- Specialty suggestions for doctor visit rows -->
+        <datalist id="doctorSpecialtyList">
+          <option value="General Physician">
+          <option value="Cardiologist">
+          <option value="Dermatologist">
+          <option value="Neurologist">
+          <option value="Orthopaedist">
+          <option value="Paediatrician">
+          <option value="Gynaecologist">
+          <option value="Ophthalmologist">
+          <option value="ENT Specialist">
+          <option value="Psychiatrist">
+          <option value="Dentist">
+          <option value="Endocrinologist">
+          <option value="Pulmonologist">
+          <option value="Gastroenterologist">
+        </datalist>
 
         <button
           id="saveButton"
@@ -706,21 +776,34 @@
   </main>
 
   <script>
+    // t() must be defined first — used by renderDoctorVisits() and renderMedications()
+    function t(key, fallback) {
+      try {
+        if (
+          typeof translations !== "undefined" &&
+          typeof getState === "function"
+        ) {
+          const language = getState().language || "en";
+          const value = translations[language]?.[key];
+          if (value) {
+            return value;
+          }
+        }
+      } catch (error) {
+        // Use fallback.
+      }
+      return fallback;
+    }
+
     const form = document.getElementById("emergencyForm");
-
     const bloodGroup = document.getElementById("bloodGroup");
-
     const allergyInput = document.getElementById("allergyInput");
     const addAllergyButton = document.getElementById("addAllergyButton");
     const allergyChips = document.getElementById("allergyChips");
-
     const medicationList = document.getElementById("medicationList");
-    const addMedicationButton =
-      document.getElementById("addMedicationButton");
-
+    const addMedicationButton = document.getElementById("addMedicationButton");
     const contactName = document.getElementById("contactName");
     const contactPhone = document.getElementById("contactPhone");
-
     const saveButton = document.getElementById("saveButton");
     const successMessage = document.getElementById("successMessage");
     const profileDocuments = document.getElementById("profileDocuments");
@@ -728,6 +811,126 @@
 
     let allergies = [];
     let medications = [];
+    let doctorVisits = [];
+
+    const doctorVisitList = document.getElementById("doctorVisitList");
+    const addDoctorVisitButton = document.getElementById("addDoctorVisitButton");
+
+    function renderDoctorVisits() {
+      doctorVisitList.innerHTML = "";
+
+      doctorVisits.forEach((visit, index) => {
+        const item = document.createElement("div");
+        item.className = "doctor-item";
+
+        // Row 1: doctor name + specialty
+        const row1 = document.createElement("div");
+        row1.className = "two-columns";
+
+        const nameInput = document.createElement("input");
+        nameInput.type = "text";
+        nameInput.maxLength = 100;
+        nameInput.placeholder = t("doctorHistory.doctorNamePlaceholder", "Doctor name");
+        nameInput.value = visit.doctorName || "";
+        nameInput.setAttribute("aria-label", t("doctorHistory.doctorName", "Doctor name"));
+        nameInput.addEventListener("input", () => {
+          doctorVisits[index].doctorName = nameInput.value;
+        });
+
+        const specInput = document.createElement("input");
+        specInput.type = "text";
+        specInput.maxLength = 100;
+        specInput.placeholder = t("doctorHistory.specialtyPlaceholder", "Specialty (optional)");
+        specInput.value = visit.specialty || "";
+        specInput.setAttribute("aria-label", t("doctorHistory.specialty", "Specialty"));
+        specInput.setAttribute("list", "doctorSpecialtyList");
+        specInput.addEventListener("input", () => {
+          doctorVisits[index].specialty = specInput.value;
+        });
+
+        row1.appendChild(nameInput);
+        row1.appendChild(specInput);
+
+        // Row 2: hospital + contact
+        const row2 = document.createElement("div");
+        row2.className = "two-columns";
+
+        const hospInput = document.createElement("input");
+        hospInput.type = "text";
+        hospInput.maxLength = 120;
+        hospInput.placeholder = t("doctorHistory.hospitalPlaceholder", "Hospital / Clinic");
+        hospInput.value = visit.hospital || "";
+        hospInput.setAttribute("aria-label", t("doctorHistory.hospital", "Hospital / Clinic"));
+        hospInput.addEventListener("input", () => {
+          doctorVisits[index].hospital = hospInput.value;
+        });
+
+        const contInput = document.createElement("input");
+        contInput.type = "tel";
+        contInput.inputMode = "numeric";
+        contInput.maxLength = 10;
+        contInput.placeholder = t("doctorHistory.contactPlaceholder", "10-digit contact");
+        contInput.value = visit.contact || "";
+        contInput.setAttribute("aria-label", t("doctorHistory.contact", "Contact number"));
+        contInput.addEventListener("input", () => {
+          contInput.value = contInput.value.replace(/\D/g, "").slice(0, 10);
+          doctorVisits[index].contact = contInput.value;
+        });
+
+        row2.appendChild(hospInput);
+        row2.appendChild(contInput);
+
+        // Row 3: visit date
+        const dateInput = document.createElement("input");
+        dateInput.type = "date";
+        dateInput.value = visit.visitDate || "";
+        dateInput.setAttribute("aria-label", t("doctorHistory.visitDate", "Visit date"));
+        dateInput.addEventListener("change", () => {
+          doctorVisits[index].visitDate = dateInput.value;
+        });
+
+        // Row 4: notes
+        const notesInput = document.createElement("textarea");
+        notesInput.maxLength = 500;
+        notesInput.placeholder = t("doctorHistory.notesPlaceholder", "Notes (optional)");
+        notesInput.value = visit.notes || "";
+        notesInput.setAttribute("aria-label", t("doctorHistory.notes", "Notes"));
+        notesInput.style.cssText = "width:100%;min-height:72px;padding:10px 14px;border:1.5px solid var(--border);border-radius:14px;font-family:inherit;font-size:14px;resize:vertical;background:#fff;color:var(--text);";
+        notesInput.addEventListener("input", () => {
+          doctorVisits[index].notes = notesInput.value;
+        });
+
+        // Remove button
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "remove-button";
+        removeBtn.textContent = t("emergency.remove", "Remove");
+        removeBtn.addEventListener("click", () => {
+          doctorVisits.splice(index, 1);
+          renderDoctorVisits();
+        });
+
+        item.appendChild(row1);
+        item.appendChild(row2);
+        item.appendChild(dateInput);
+        item.appendChild(notesInput);
+        item.appendChild(removeBtn);
+
+        doctorVisitList.appendChild(item);
+      });
+    }
+
+    addDoctorVisitButton.addEventListener("click", () => {
+      doctorVisits.push({ doctorName: "", specialty: "", hospital: "", contact: "", visitDate: "", notes: "" });
+      renderDoctorVisits();
+      // Focus the first input of the new row
+      const allItems = doctorVisitList.querySelectorAll(".doctor-item");
+      if (allItems.length) {
+        const lastItem = allItems[allItems.length - 1];
+        const firstInput = lastItem.querySelector("input");
+        if (firstInput) firstInput.focus();
+      }
+    });
 
     function renderSelectedDocuments() {
       selectedProfileDocuments.replaceChildren();
@@ -739,26 +942,6 @@
     }
 
     profileDocuments.addEventListener("change", renderSelectedDocuments);
-
-    function t(key, fallback) {
-      try {
-        if (
-          typeof translations !== "undefined" &&
-          typeof getState === "function"
-        ) {
-          const language = getState().language || "en";
-          const value = translations[language]?.[key];
-
-          if (value) {
-            return value;
-          }
-        }
-      } catch (error) {
-        // Use fallback.
-      }
-
-      return fallback;
-    }
 
     function showFieldError(elementId, text) {
       const element = document.getElementById(elementId);
@@ -1027,8 +1210,27 @@
         contactPhone.value = emergencyInfo.contactPhone;
       }
 
+      // Prefill doctor visits from top-level state.doctorHistory
+      try {
+        const fullState = getState();
+        if (Array.isArray(fullState.doctorHistory)) {
+          doctorVisits = fullState.doctorHistory.map((v) => ({
+            id: v.id,
+            doctorName: v.doctorName || "",
+            specialty: v.specialty || "",
+            hospital: v.hospital || "",
+            contact: v.contact || "",
+            visitDate: v.visitDate || "",
+            notes: v.notes || ""
+          }));
+        }
+      } catch (e) {
+        doctorVisits = [];
+      }
+
       renderAllergyChips();
       renderMedications();
+      renderDoctorVisits();
       updateSaveButton();
     }
 
@@ -1126,7 +1328,18 @@
           ...formData,
           lastUpdated: new Date().toISOString()
         },
-        vault: [...existingVault, ...newVaultItems]
+        vault: [...existingVault, ...newVaultItems],
+        doctorHistory: doctorVisits
+          .filter((v) => v.doctorName && v.doctorName.trim())
+          .map((v) => ({
+            id: v.id || Date.now() + Math.random(),
+            doctorName: v.doctorName.trim(),
+            specialty: (v.specialty || "").trim(),
+            hospital: (v.hospital || "").trim(),
+            contact: (v.contact || "").trim(),
+            visitDate: v.visitDate || "",
+            notes: (v.notes || "").trim()
+          }))
       });
 
       successMessage.classList.add("visible");
