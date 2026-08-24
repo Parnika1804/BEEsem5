@@ -1,45 +1,56 @@
+/*
+ * PulseTag — Theme System
+ * CSS custom property overrides for light / dark.
+ * Applied globally via [data-theme="dark"] on <html>.
+ */
+
+/* ── Light theme surface tokens ──────────────────────────────── */
 :root {
-  --theme-page: #ffffff;
-  --theme-surface: #ffffff;
-  --theme-surface-alt: #f8fafc;
-  --theme-text: #1e293b;
-  --theme-heading: #0f172a;
-  --theme-muted: #64748b;
-  --theme-border: #e2e8f0;
-  --theme-control: #f1f5f9;
-  --theme-control-hover: #e2e8f0;
-  --theme-shadow: rgba(15, 23, 42, 0.08);
-  --theme-focus: #0f766e;
-  --theme-danger-bg: #fff1f2;
-  --theme-danger-text: #991b1b;
-  --theme-success-bg: #f0fdf4;
-  --theme-success-text: #166534;
+  --theme-page:           #f2f8fc;
+  --theme-surface:        #ffffff;
+  --theme-surface-alt:    #eaf6fb;
+  --theme-text:           #0f2d4a;
+  --theme-heading:        #071e34;
+  --theme-muted:          #4e7085;
+  --theme-border:         #c7dde8;
+  --theme-control:        #e0f0f8;
+  --theme-control-hover:  #c7dde8;
+  --theme-shadow:         rgba(15, 45, 74, 0.09);
+  --theme-focus:          #0ea5c8;
+  --theme-danger-bg:      #fff0ee;
+  --theme-danger-text:    #9b2335;
+  --theme-success-bg:     #d1fae5;
+  --theme-success-text:   #0e7153;
 }
 
+/* ── Dark theme surface tokens ───────────────────────────────── */
 :root[data-theme="dark"] {
-  --theme-page: #101827;
-  --theme-surface: #182334;
-  --theme-surface-alt: #202d40;
-  --theme-text: #e5edf5;
-  --theme-heading: #f8fafc;
-  --theme-muted: #a9b8c9;
-  --theme-border: #3b4b61;
-  --theme-control: #243247;
-  --theme-control-hover: #314158;
-  --theme-shadow: rgba(0, 0, 0, 0.28);
-  --theme-focus: #5eead4;
-  --theme-danger-bg: #3a2028;
-  --theme-danger-text: #fecdd3;
-  --theme-success-bg: #19352b;
-  --theme-success-text: #bbf7d0;
+  --theme-page:           #091825;
+  --theme-surface:        #0d1f2e;
+  --theme-surface-alt:    #122536;
+  --theme-text:           #cde5f4;
+  --theme-heading:        #e8f6ff;
+  --theme-muted:          #6ba3bf;
+  --theme-border:         #1e3d55;
+  --theme-control:        #142638;
+  --theme-control-hover:  #1e3d55;
+  --theme-shadow:         rgba(0, 0, 0, 0.35);
+  --theme-focus:          #22d3ee;
+  --theme-danger-bg:      #2e1212;
+  --theme-danger-text:    #fca5a5;
+  --theme-success-bg:     #0a2e20;
+  --theme-success-text:   #6ee7b7;
 }
 
+/* ── Base resets ──────────────────────────────────────────────── */
 html,
 body {
   background-color: var(--theme-page) !important;
   color: var(--theme-text) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* ── Surface overrides ────────────────────────────────────────── */
 body,
 .navbar,
 .card,
@@ -63,15 +74,19 @@ table,
 .vault-list,
 .info-box,
 .hint,
-.trust-strip {
+.trust-strip,
+.reassurance-section,
+.reassurance-card {
   background-color: var(--theme-surface-alt) !important;
 }
 
+/* Announcement bar stays teal */
 .announcement-bar {
   background-color: var(--teal-bg) !important;
   color: var(--teal-text) !important;
 }
 
+/* ── Text ─────────────────────────────────────────────────────── */
 .brand,
 .brand-title,
 h1,
@@ -94,7 +109,8 @@ p,
 .section-description,
 .hint,
 td,
-small {
+small,
+.footer-text {
   color: var(--theme-muted) !important;
 }
 
@@ -103,6 +119,7 @@ a:hover {
   color: var(--theme-heading) !important;
 }
 
+/* ── Primary buttons ──────────────────────────────────────────── */
 .logo-icon,
 .button-primary,
 .submit-btn,
@@ -111,6 +128,9 @@ a:hover {
 .continue-btn,
 .get-started,
 .hero-action,
+.tile-action-btn,
+.card-btn,
+.showcase-btn,
 .button-primary:hover:not(:disabled),
 .submit-btn:hover:not(:disabled),
 .verify-button:hover:not(:disabled),
@@ -120,16 +140,41 @@ a:hover {
   color: #ffffff !important;
 }
 
+/* In dark mode, primary buttons use the accent color for visibility */
+:root[data-theme="dark"] .logo-icon,
+:root[data-theme="dark"] .button-primary,
+:root[data-theme="dark"] .submit-btn,
+:root[data-theme="dark"] .verify-button,
+:root[data-theme="dark"] .save-button,
+:root[data-theme="dark"] .continue-btn,
+:root[data-theme="dark"] .get-started,
+:root[data-theme="dark"] .hero-action,
+:root[data-theme="dark"] .tile-action-btn,
+:root[data-theme="dark"] .card-btn,
+:root[data-theme="dark"] .button-primary:hover:not(:disabled),
+:root[data-theme="dark"] .submit-btn:hover:not(:disabled),
+:root[data-theme="dark"] .verify-button:hover:not(:disabled),
+:root[data-theme="dark"] .save-button:hover:not(:disabled),
+:root[data-theme="dark"] .continue-btn:not(:disabled):hover {
+  background-color: #0ea5c8 !important;
+  color: #ffffff !important;
+}
+
+/* ── Secondary buttons ────────────────────────────────────────── */
 .nav-btn,
 .button-secondary,
-.nav-btn:hover,
-.button-secondary:hover,
 .resend-button,
 .upload-button {
   background-color: var(--theme-control) !important;
   color: var(--theme-heading) !important;
 }
 
+.nav-btn:hover,
+.button-secondary:hover {
+  background-color: var(--theme-control-hover) !important;
+}
+
+/* ── Borders ──────────────────────────────────────────────────── */
 button,
 input,
 select,
@@ -142,10 +187,13 @@ textarea,
 .vault-section,
 table,
 th,
-td {
+td,
+.info-item,
+.qr-wrapper {
   border-color: var(--theme-border) !important;
 }
 
+/* ── Inputs ───────────────────────────────────────────────────── */
 input,
 select,
 textarea {
@@ -156,16 +204,18 @@ textarea {
 input::placeholder,
 textarea::placeholder {
   color: var(--theme-muted) !important;
-  opacity: 0.85;
+  opacity: 0.75;
 }
 
 input:focus,
 select:focus,
 textarea:focus,
+.input-wrapper:focus-within,
 button:focus-visible,
 a:focus-visible {
   outline-color: var(--theme-focus) !important;
   border-color: var(--theme-focus) !important;
+  box-shadow: 0 0 0 3px rgba(14, 165, 200, 0.18) !important;
 }
 
 input:disabled,
@@ -174,9 +224,10 @@ select:disabled,
 textarea:disabled {
   background-color: var(--theme-control) !important;
   color: var(--theme-muted) !important;
-  opacity: 0.7;
+  opacity: 0.65;
 }
 
+/* ── Alerts ───────────────────────────────────────────────────── */
 [role="alert"],
 .error,
 .access-error {
@@ -184,6 +235,7 @@ textarea:disabled {
   color: var(--theme-danger-text) !important;
 }
 
+/* ── Success / status ─────────────────────────────────────────── */
 .success,
 .status-pill,
 .success-message {
@@ -191,12 +243,14 @@ textarea:disabled {
   color: var(--theme-success-text) !important;
 }
 
+/* ── SVG / icons inherit current color ───────────────────────── */
 svg,
 .icon,
 button svg {
   color: currentColor;
 }
 
+/* ── Theme toggle button ──────────────────────────────────────── */
 .theme-toggle {
   appearance: none;
   border: 1px solid var(--theme-border);
@@ -208,8 +262,9 @@ button svg {
   font-size: 12px;
   font-weight: 600;
   line-height: 1;
-  padding: 8px 12px;
+  padding: 8px 14px;
   white-space: nowrap;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
 .theme-toggle:hover {
@@ -221,15 +276,57 @@ button svg {
   outline-offset: 2px;
 }
 
+/* ── Dark mode: form section backgrounds ─────────────────────── */
 :root[data-theme="dark"] .section.health,
 :root[data-theme="dark"] .section.allergies,
 :root[data-theme="dark"] .section.meds,
 :root[data-theme="dark"] .section.contact,
 :root[data-theme="dark"] .section.vault,
+:root[data-theme="dark"] .section.doctors,
 :root[data-theme="dark"] .emergency-section {
   background: var(--theme-surface-alt) !important;
+  border-color: var(--theme-border) !important;
 }
 
+/* ── Dark mode: tile cards ────────────────────────────────────── */
+:root[data-theme="dark"] .tile.health-tile {
+  background: #0d2d45 !important;
+}
+:root[data-theme="dark"] .tile.vault-tile {
+  background: #0a2e20 !important;
+}
+:root[data-theme="dark"] .tile.status-tile {
+  background: #2a1f08 !important;
+}
+:root[data-theme="dark"] .tile {
+  background: #122536 !important;
+}
+
+/* ── Dark mode: pastel cards ──────────────────────────────────── */
+:root[data-theme="dark"] .pastel-card.blue    { background: #0d2d45 !important; }
+:root[data-theme="dark"] .pastel-card.mint    { background: #0a2e20 !important; }
+:root[data-theme="dark"] .pastel-card.blush   { background: #2e1212 !important; }
+:root[data-theme="dark"] .pastel-card.peach   { background: #2a1f08 !important; }
+:root[data-theme="dark"] .pastel-card.lavender { background: #1e1535 !important; }
+
+/* ── Dark mode: wave divider ──────────────────────────────────── */
 :root[data-theme="dark"] .wave-divider .shape-fill {
   fill: var(--theme-surface-alt) !important;
+}
+
+/* ── Dark mode: cluster cards ────────────────────────────────── */
+:root[data-theme="dark"] .cluster-card {
+  background: var(--theme-surface) !important;
+}
+
+/* ── Dark mode: vault link panel ──────────────────────────────── */
+:root[data-theme="dark"] .vault-link-panel {
+  background: #0d2d45 !important;
+  border-color: #1e3d55 !important;
+}
+
+/* ── Dark mode: locked state ─────────────────────────────────── */
+:root[data-theme="dark"] .locked {
+  background: #2e1212 !important;
+  border-color: #7f1d1d !important;
 }

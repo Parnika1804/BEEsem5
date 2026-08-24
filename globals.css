@@ -1,0 +1,480 @@
+/*
+ * PulseTag — Global Design System
+ * Visual-only: palette, navbar, hero, animations, transitions.
+ * No layout/functionality changes. All colors via CSS variables.
+ */
+
+/* ── Smooth scroll ────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Updated CSS custom properties (light) ───────────────────── */
+:root {
+  /* Core palette */
+  --primary:           #0f2d4a;
+  --primary-dark:      #071e34;
+  --accent:            #0ea5c8;
+  --accent-hover:      #0891b2;
+  --accent-teal:       #0ea5c8;
+  --teal-bg:           #e0f6fb;
+  --teal-text:         #0369a1;
+
+  /* Backgrounds */
+  --hero-bg:           #eaf6fb;
+  --page-bg:           #f2f8fc;
+  --strip-bg:          #fde8e4;
+  --strip-text:        #991b1b;
+
+  /* Cards */
+  --card-blue:         #dbeafe;
+  --card-mint:         #d1fae5;
+  --card-blush:        #fee2e2;
+  --card-peach:        #fef3c7;
+  --card-lavender:     #ede9fe;
+
+  /* Text */
+  --text:              #0f2d4a;
+  --muted:             #4e7085;
+  --white:             #ffffff;
+  --border:            #c7dde8;
+
+  /* Semantic */
+  --success:           #0e7153;
+  --success-bg:        #d1fae5;
+  --warning:           #92400e;
+  --warning-bg:        #fef3c7;
+  --error:             #c0392b;
+  --error-bg:          #fff0ee;
+
+  /* Shadows */
+  --shadow-sm:         0 2px 8px rgba(14, 165, 200, 0.08);
+  --shadow-md:         0 8px 28px rgba(15, 45, 74, 0.10);
+  --shadow-lg:         0 16px 48px rgba(15, 45, 74, 0.13);
+
+  /* Radii */
+  --radius-sm:         10px;
+  --radius-md:         16px;
+  --radius-lg:         24px;
+  --radius-xl:         32px;
+
+  /* Navbar */
+  --nav-bg-rgb:        242, 248, 252;   /* page-bg as rgb for rgba() */
+  --nav-frosted:       rgba(242, 248, 252, 0.80);
+  --nav-border-glass:  rgba(199, 221, 232, 0.55);
+}
+
+/* ── Updated CSS custom properties (dark) ────────────────────── */
+:root[data-theme="dark"] {
+  --primary:           #e2f0f8;
+  --primary-dark:      #c0ddef;
+  --accent:            #22d3ee;
+  --accent-hover:      #06b6d4;
+  --accent-teal:       #22d3ee;
+  --teal-bg:           #0c2d3f;
+  --teal-text:         #67e8f9;
+
+  --hero-bg:           #091825;
+  --page-bg:           #0d1f2e;
+  --strip-bg:          #2a1515;
+  --strip-text:        #fca5a5;
+
+  --card-blue:         #0d2d45;
+  --card-mint:         #0a2e20;
+  --card-blush:        #2e1212;
+  --card-peach:        #2a1f08;
+  --card-lavender:     #1e1535;
+
+  --text:              #daeaf6;
+  --muted:             #7fb3cc;
+  --white:             #0d1f2e;
+  --border:            #1e3d55;
+
+  --success:           #34d399;
+  --success-bg:        #0a2e20;
+  --warning:           #fbbf24;
+  --warning-bg:        #2a1f08;
+  --error:             #f87171;
+  --error-bg:          #2e1212;
+
+  --shadow-sm:         0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md:         0 8px 28px rgba(0, 0, 0, 0.35);
+  --shadow-lg:         0 16px 48px rgba(0, 0, 0, 0.45);
+
+  --nav-bg-rgb:        13, 31, 46;
+  --nav-frosted:       rgba(13, 31, 46, 0.85);
+  --nav-border-glass:  rgba(30, 61, 85, 0.60);
+}
+
+/* ── Keyframes ────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(14, 165, 200, 0.35); }
+  50%       { box-shadow: 0 0 0 8px rgba(14, 165, 200, 0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Entrance animations ──────────────────────────────────────── */
+/* Cards on .card, .content, .cluster-card, pastel cards */
+.card,
+.content,
+.cluster-card,
+.pastel-card,
+.showcase-card,
+.reassurance-card,
+.section.health,
+.section.allergies,
+.section.meds,
+.section.contact,
+.section.vault,
+.section.doctors {
+  animation: fadeInUp 0.45s ease both;
+}
+
+/* Stagger siblings */
+.card:nth-child(1),  .content:nth-child(1)  { animation-delay: 0.05s; }
+.card:nth-child(2),  .content:nth-child(2)  { animation-delay: 0.12s; }
+.card:nth-child(3),  .content:nth-child(3)  { animation-delay: 0.19s; }
+.pastel-card:nth-child(1)  { animation-delay: 0.08s; }
+.pastel-card:nth-child(2)  { animation-delay: 0.16s; }
+.pastel-card:nth-child(3)  { animation-delay: 0.24s; }
+.showcase-card:nth-child(1) { animation-delay: 0.06s; }
+.showcase-card:nth-child(2) { animation-delay: 0.12s; }
+.showcase-card:nth-child(3) { animation-delay: 0.18s; }
+.showcase-card:nth-child(4) { animation-delay: 0.24s; }
+.reassurance-card:nth-child(1) { animation-delay: 0.08s; }
+.reassurance-card:nth-child(2) { animation-delay: 0.16s; }
+.reassurance-card:nth-child(3) { animation-delay: 0.24s; }
+
+/* Hero content */
+.hero-content,
+.hero-heading,
+.header {
+  animation: fadeInUp 0.5s ease both;
+}
+.hero-subtext   { animation: fadeInUp 0.5s ease 0.1s both; }
+.get-started    { animation: fadeInUp 0.5s ease 0.2s both; }
+.hero-visual    { animation: fadeInUp 0.5s ease 0.15s both; }
+
+/* Form sections stagger */
+.section.health    { animation-delay: 0.06s; }
+.section.allergies { animation-delay: 0.12s; }
+.section.meds      { animation-delay: 0.18s; }
+.section.contact   { animation-delay: 0.24s; }
+.section.vault     { animation-delay: 0.30s; }
+.section.doctors   { animation-delay: 0.36s; }
+
+/* Success / error messages */
+.success.visible,
+.error.visible,
+.message.visible {
+  animation: slideDown 0.25s ease both;
+}
+
+/* ── Navbar — sticky frosted glass ───────────────────────────── */
+/*
+ * The navbar in every page is a flex container that is itself centered
+ * (max-width: 1160px; margin: 0 auto). We need to make it stick and
+ * apply frosted glass across the full viewport width.
+ *
+ * Strategy: wrap the sticky behaviour on a parent wrapper via a
+ * CSS-only trick — target the nav directly and stretch its background
+ * with box-shadow instead of negative margins (which break flex layout).
+ */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  /* Frosted background applied via pseudo-element so the inner layout
+     (max-width + flex) is never disturbed */
+  isolation: isolate;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Full-bleed frosted glass using a pseudo-element behind content */
+.navbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--nav-frosted);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--nav-border-glass);
+  /* Extend past the centered max-width to cover full viewport */
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  box-shadow: 0 1px 0 var(--nav-border-glass), 0 4px 20px rgba(14, 165, 200, 0.06);
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* ── Logo pulse ───────────────────────────────────────────────── */
+.logo-icon {
+  animation: pulse-ring 2.8s ease-in-out infinite;
+  transition: transform 0.2s ease;
+}
+
+.logo-icon:hover {
+  transform: scale(1.08);
+}
+
+/* ── Navbar nav-link & nav-btn refinements ────────────────────── */
+.nav-link {
+  position: relative;
+  transition: color 0.2s ease !important;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.25s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-btn {
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease !important;
+  border: 1px solid var(--border);
+}
+
+.nav-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* Theme toggle smooth */
+.theme-toggle {
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease !important;
+}
+
+/* ── Hero — full viewport height ─────────────────────────────── */
+.hero-section {
+  min-height: calc(100vh - 46px); /* subtract announcement bar */
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, var(--teal-bg) 0%, var(--hero-bg) 60%, var(--page-bg) 100%) !important;
+  padding-top: 56px;
+  padding-bottom: 80px;
+}
+
+.hero-section .hero-container {
+  width: 100%;
+}
+
+/* ── Button / card hover lifts ────────────────────────────────── */
+.get-started,
+.card-btn,
+.button-primary,
+.button.button-primary,
+.save-button,
+.submit-btn,
+.verify-button,
+.continue-btn,
+.tile-action-btn,
+.hero-action,
+.showcase-btn {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+}
+
+.get-started:hover:not(:disabled),
+.card-btn:hover,
+.button-primary:hover,
+.button.button-primary:hover,
+.save-button:hover:not(:disabled),
+.submit-btn:hover:not(:disabled),
+.verify-button:hover:not(:disabled),
+.continue-btn:not(:disabled):hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Pulse on "Show Emergency QR" / .button-primary.pulse, and .hero-action */
+.hero-action,
+#scanButton ~ .buttons > .button-primary:first-child {
+  animation: pulse-ring 2.8s ease-in-out 1s infinite;
+}
+
+/* QR page — "Save QR Image" primary button pulse */
+#saveButton.button.button-primary {
+  animation: pulse-ring 2.8s ease-in-out 0.8s infinite;
+}
+
+/* Home page — hero QR link card button */
+.hero .hero-action {
+  animation: pulse-ring 2.8s ease-in-out 0.5s infinite;
+}
+
+/* Cluster cards hover */
+.cluster-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.cluster-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Pastel cards */
+.pastel-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.pastel-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Showcase cards */
+.showcase-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+  border: 1px solid var(--border);
+}
+
+.showcase-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Tile hover on home dashboard */
+.tile {
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.tile:hover:not(.status-tile) {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* ── Input focus transitions ──────────────────────────────────── */
+input,
+select,
+textarea,
+.input-wrapper,
+.otp-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
+}
+
+/* ── CSS spinners for async states ───────────────────────────── */
+/* All pages already have .spinner class — ensure consistent style */
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite !important;
+  flex-shrink: 0;
+}
+
+/* Dark spinner variant for light backgrounds */
+.spinner-dark {
+  border-color: rgba(15, 45, 74, 0.2);
+  border-top-color: var(--primary);
+}
+
+/* ── Form section colors — theme-variable overrides ──────────── */
+/* These supplement the per-page colors so they use vars */
+:root[data-theme="dark"] .section.doctors {
+  background: #1a0d2e !important;
+  border-color: #4c1d95 !important;
+}
+
+/* ── Accent refinements on existing elements ─────────────────── */
+/* step-pill, status-pill get subtle teal accent */
+.step-pill {
+  background: var(--teal-bg) !important;
+  color: var(--teal-text) !important;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+/* QR active status pill */
+.status-pill {
+  background: var(--card-mint) !important;
+  color: var(--success) !important;
+  transition: background 0.25s ease;
+}
+
+/* ── Announcement bar ─────────────────────────────────────────── */
+.announcement-bar {
+  background: var(--teal-bg) !important;
+  color: var(--teal-text) !important;
+  font-size: 13px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(14, 165, 200, 0.15);
+}
+
+/* ── Cards & surfaces — updated shadow ───────────────────────── */
+.card,
+.content,
+.reassurance-card {
+  box-shadow: var(--shadow-md) !important;
+  transition: box-shadow 0.25s ease !important;
+}
+
+/* ── Language chip transition ────────────────────────────────── */
+.language-chip {
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.language-chip:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* ── Consent info items ───────────────────────────────────────── */
+.info-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.info-item:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Not-now panel slide ──────────────────────────────────────── */
+.not-now-panel.visible {
+  animation: slideDown 0.25s ease both;
+}
+
+/* ── Responsive: hide nav-links on scroll still works ────────── */
+/* (navbar is sticky, so it stays at top; no JS needed) */
+
+/* ── Print: don't animate ────────────────────────────────────── */
+@media print {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
