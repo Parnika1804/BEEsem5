@@ -13,6 +13,7 @@
 
   <script src="state.js"></script>
   <script src="i18n.js"></script>
+  <script src="api.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
@@ -163,6 +164,42 @@
       color: var(--muted);
       font-size: 15px;
       line-height: 1.6;
+    }
+
+    .location-status {
+      margin: 14px auto 0;
+      max-width: 520px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .nearby-hospitals {
+      margin: 22px auto 0;
+      max-width: 520px;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      text-align: left;
+    }
+
+    .nearby-hospitals h2 {
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+
+    .hospital-list {
+      display: grid;
+      gap: 6px;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .api-loading,
+    .api-error {
+      color: var(--muted);
+      font-size: 13px;
     }
 
     .qr-wrapper {
@@ -479,6 +516,14 @@
         Emergency responders can scan this QR code to access your shared emergency information and medical vault.
       </p>
 
+      <p id="lastKnownLocation" class="location-status">Last known location: Location unavailable</p>
+
+      <section class="nearby-hospitals" aria-labelledby="nearbyHospitalsTitle">
+        <h2 id="nearbyHospitalsTitle">Nearby Hospitals</h2>
+        <p id="hospitalStatus" class="api-loading">Finding nearby hospitals...</p>
+        <ul id="hospitalList" class="hospital-list"></ul>
+      </section>
+
       <!-- Locked state -->
       <div id="lockedState" class="locked hidden">
         <div class="locked-icon" aria-hidden="true">🔒</div>
@@ -615,6 +660,9 @@
     const scannerMessage = document.getElementById("scannerMessage");
     const scanResult = document.getElementById("scanResult");
     const vaultLinkText = document.getElementById("vaultLinkText");
+    const lastKnownLocation = document.getElementById("lastKnownLocation");
+    const hospitalStatus = document.getElementById("hospitalStatus");
+    const hospitalList = document.getElementById("hospitalList");
     let cameraStream = null;
     let scanFrame = null;
 
@@ -640,7 +688,22 @@
       lockedState.classList.add("hidden");
       qrState.classList.remove("hidden");
 
-      const patientId = state.patientId || `pt-${Math.random().toString(36).slice(2, 8)}`;
+      function createUniquePatientId() {
+        const usedIds = new Set([
+          state.patientId,
+          ...(Array.isArray(state.auditLog) ? state.auditLog.map((entry) => entry.patientId) : [])
+        ]);
+        let patientId = `pt-${Math.random().toString(36).slice(2, 8)}`;
+
+        // while loop.
+        while (usedIds.has(patientId)) {
+          patientId = `pt-${Math.random().toString(36).slice(2, 8)}`;
+        }
+
+        return patientId;
+      }
+
+      const patientId = state.patientId || createUniquePatientId();
 
       if (!state.patientId) {
         state = updateState({ patientId });
@@ -692,12 +755,25 @@
     function showScanResult(value) {
       try {
         const data = JSON.parse(value);
-        const lines = [
-          `Blood group: ${data.bloodGroup || "Not provided"}`,
-          `Allergies: ${data.allergies?.join(", ") || "None listed"}`,
-          `Medications: ${data.medications?.map((item) => `${item.name} (${item.dosage})`).join(", ") || "None listed"}`,
-          `Emergency contact: ${data.contactName || "Not provided"} ${data.contactPhone || ""}`
-        ];
+        const medicalProfile = {
+          bloodGroup: data.bloodGroup || "Not provided",
+          allergies: data.allergies?.join(", ") || "None listed",
+          medications: data.medications?.map((item) => `${item.name} (${item.dosage})`).join(", ") || "None listed",
+          emergencyContact: `${data.contactName || "Not provided"} ${data.contactPhone || ""}`.trim()
+        };
+        const lines = [];
+
+        // for-in loop.
+        for (const field in medicalProfile) {
+          const labels = {
+            bloodGroup: "Blood group",
+            allergies: "Allergies",
+            medications: "Medications",
+            emergencyContact: "Emergency contact"
+          };
+          lines.push(`${labels[field]}: ${medicalProfile[field]}`);
+        }
+
         scanResult.textContent = lines.join("\n");
       } catch (error) {
         scanResult.textContent = value;
@@ -705,6 +781,94 @@
 
       scanResult.classList.remove("hidden");
     }
+
+    function showLastKnownLocation(value) {
+      lastKnownLocation.textContent = `Last known location: ${value || "Location unavailable"}`;
+    }
+
+    async function loadLastKnownLocation() {
+      let permissionAsked = false;
+      let savedLocation = null;
+
+      try {
+        permissionAsked = sessionStorage.getItem("geolocation-permission-asked-this-session") === "true";
+        savedLocation = getState().emergencyInfo?.lastKnownLocation;
+      } catch (error) {
+        // Location is optional; continue with the unavailable fallback.
+      }
+
+      if (permissionAsked) {
+        showLastKnownLocation(savedLocation);
+        hospitalStatus.textContent = "Hospitals unavailable without your location.";
+        return;
+      }
+
+      if (!navigator.geolocation) {
+        showLastKnownLocation(savedLocation);
+        hospitalStatus.textContent = "Hospitals unavailable without your location.";
+        return;
+      }
+
+      try {
+        // sessionStorage is used because this permission prompt should be avoided only during this browser session.
+        sessionStorage.setItem("geolocation-permission-asked-this-session", "true");
+      } catch (error) {
+        // Storage may be unavailable; geolocation can still proceed.
+      }
+
+      navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+        const addressResult = await fetchAddressFromCoords(coords.latitude, coords.longitude);
+
+        if (addressResult.success) {
+          const address = addressResult.data?.display_name || "Location unavailable";
+          const currentState = getState();
+          updateState({
+            emergencyInfo: {
+              ...(currentState.emergencyInfo || {}),
+              lastKnownLocation: address
+            }
+          });
+          showLastKnownLocation(address);
+        } else {
+          showLastKnownLocation(savedLocation);
+        }
+
+        loadNearbyHospitals(coords.latitude, coords.longitude);
+      }, () => {
+        showLastKnownLocation(savedLocation);
+        hospitalStatus.textContent = "Hospitals unavailable without your location.";
+      }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 });
+    }
+
+    async function loadNearbyHospitals(lat, lon) {
+      hospitalStatus.textContent = "Finding nearby hospitals...";
+      hospitalList.replaceChildren();
+      const result = await fetchNearbyHospitals(lat, lon);
+
+      if (!result.success) {
+        hospitalStatus.textContent = result.error;
+        return;
+      }
+
+      const hospitals = (Array.isArray(result.data?.elements) ? result.data.elements : [])
+        .filter((item) => item.tags?.name)
+        .slice(0, 5);
+
+      hospitalStatus.textContent = hospitals.length ? "" : "No nearby hospitals found.";
+      hospitals.forEach((hospital) => {
+        const item = document.createElement("li");
+        const name = hospital.tags.name;
+        const latitude = hospital.lat ?? hospital.center?.lat;
+        const longitude = hospital.lon ?? hospital.center?.lon;
+        const distance = latitude && longitude
+          ? Math.round(Math.hypot((latitude - lat) * 111000, (longitude - lon) * 111000) / 100) / 10
+          : null;
+        item.textContent = distance ? `${name} - ${distance} km away` : name;
+        hospitalList.appendChild(item);
+      });
+    }
+
+    loadLastKnownLocation();
 
     function stopCamera() {
       if (scanFrame) {

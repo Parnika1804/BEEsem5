@@ -1103,6 +1103,26 @@
       return /^[6-9]\d{9}$/.test(contactPhone.value.trim());
     }
 
+    // Separate callback validation from the existing Promise-based mockApi functions.
+    function validateEmergencyContact(onSuccess, onError) {
+      const errors = [];
+
+      if (!isContactNameValid()) {
+        errors.push("name");
+      }
+
+      if (!isContactPhoneValid()) {
+        errors.push("phone");
+      }
+
+      if (errors.length) {
+        onError(errors);
+        return;
+      }
+
+      onSuccess();
+    }
+
     function areMedicationsValid() {
       return medications.every(
         (medication) =>
@@ -1134,37 +1154,43 @@
         clearFieldError("bloodGroupError");
       }
 
-      if (!isContactNameValid()) {
-        valid = false;
+      validateEmergencyContact(
+        () => {
+          clearFieldError("contactNameError");
+          clearFieldError("contactPhoneError");
+        },
+        (errors) => {
+          valid = false;
 
-        if (showErrors) {
-          showFieldError(
-            "contactNameError",
-            t(
-              "emergency.contactNameRequired",
-              "Please enter the emergency contact's name."
-            )
-          );
+          if (!showErrors) {
+            return;
+          }
+
+          if (errors.includes("name")) {
+            showFieldError(
+              "contactNameError",
+              t(
+                "emergency.contactNameRequired",
+                "Please enter the emergency contact's name."
+              )
+            );
+          } else {
+            clearFieldError("contactNameError");
+          }
+
+          if (errors.includes("phone")) {
+            showFieldError(
+              "contactPhoneError",
+              t(
+                "emergency.contactPhoneInvalid",
+                "Please enter a valid 10-digit Indian mobile number."
+              )
+            );
+          } else {
+            clearFieldError("contactPhoneError");
+          }
         }
-      } else {
-        clearFieldError("contactNameError");
-      }
-
-      if (!isContactPhoneValid()) {
-        valid = false;
-
-        if (showErrors) {
-          showFieldError(
-            "contactPhoneError",
-            t(
-              "emergency.contactPhoneInvalid",
-              "Please enter a valid 10-digit Indian mobile number."
-            )
-          );
-        }
-      } else {
-        clearFieldError("contactPhoneError");
-      }
+      );
 
       if (!areMedicationsValid()) {
         valid = false;

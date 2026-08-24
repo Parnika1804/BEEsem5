@@ -13,6 +13,7 @@
 
   <script src="state.js"></script>
   <script src="i18n.js"></script>
+  <script src="api.js"></script>
 
   <style>
     * {
@@ -261,6 +262,25 @@
       margin-bottom: 28px;
     }
 
+    .health-tip {
+      max-width: 720px;
+      margin: 0 auto 28px;
+      padding: 18px 22px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--card-blue);
+    }
+
+    .health-tip h2 {
+      margin-bottom: 6px;
+      font-size: 18px;
+    }
+
+    .health-tip p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
     .section-title-wrap h2 {
       font-family: 'Poppins', sans-serif;
       font-size: 24px;
@@ -500,6 +520,11 @@
       <h2>Emergency Profile & Records</h2>
     </div>
 
+    <section class="health-tip" aria-labelledby="healthTipTitle">
+      <h2 id="healthTipTitle">Health Tip of the Day</h2>
+      <p id="healthTipText">Loading today's health tip...</p>
+    </section>
+
     <section class="tiles" aria-label="PulseTag options">
       <a href="emergency-profile.html" class="tile health-tile">
         <div>
@@ -658,6 +683,23 @@
           resetState();
         }
       });
+
+    async function loadHealthTip() {
+      const healthTipText = document.getElementById("healthTipText");
+      const result = await fetchHealthTip();
+
+      if (!result.success) {
+        healthTipText.textContent = result.error;
+        return;
+      }
+
+      const tip = Array.isArray(result.data) ? result.data[0] : result.data;
+      healthTipText.textContent = tip?.q
+        ? `${tip.q}${tip.a ? ` - ${tip.a}` : ""}`
+        : "Health tip unavailable right now.";
+    }
+
+    loadHealthTip();
   </script>
 </body>
 </html>

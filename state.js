@@ -12,6 +12,7 @@ const defaultState = {
     medications: [],
     contactName: null,
     contactPhone: null,
+    lastKnownLocation: null,
     lastUpdated: null
   },
   vault: [],
