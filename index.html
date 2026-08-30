@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <script src="theme.js"></script>
   <title>PulseTag — Your Health Data, Always Accessible</title>
 
@@ -10,13 +11,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <script>
-    const savedTheme = localStorage.getItem('pulsetag_theme');
-    localStorage.clear();
-    if (savedTheme) {
-      localStorage.setItem('pulsetag_theme', savedTheme);
-    }
-  </script>
   <script src="state.js"></script>
 
   <style>
@@ -648,21 +642,24 @@
   <!-- Top Announcement Bar -->
   <div class="announcement-bar">
     <span class="announcement-badge"></span>
-    <span>Your health data, always accessible — ABDM Integrated Emergency Identity</span>
+    <span>Emergency-ready health access, built around your consent.</span>
+    <a href="#how-it-works">See how it works <span aria-hidden="true">→</span></a>
   </div>
 
   <!-- Navbar -->
   <nav class="navbar" aria-label="Main Navigation">
     <a href="index.html" class="brand">
       <div class="logo-icon" aria-hidden="true">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12h3l2-4 3.2 8 2.5-5H21"/>
+          <path d="M12 3.5a8.5 8.5 0 1 1-6.01 2.49" opacity=".72"/>
         </svg>
       </div>
-      <span class="brand-title">PulseTag</span>
+      <span class="brand-title">pulse<span>tag</span></span>
     </a>
 
-    <div class="nav-links">
+    <button class="menu-toggle" type="button" aria-controls="primary-navigation" aria-expanded="false" aria-label="Open navigation menu"><span></span><span></span><span></span></button>
+    <div class="nav-links" id="primary-navigation">
       <a href="home.html" class="nav-link">Dashboard</a>
       <a href="vault.html" class="nav-link">Medical Vault</a>
       <a href="qr.html" class="nav-link">Emergency QR</a>
@@ -670,7 +667,7 @@
     </div>
 
     <a href="language.html" class="nav-btn">
-      <span>Get Started</span>
+      <span>Build my profile</span>
       <span aria-hidden="true">→</span>
     </a>
   </nav>
@@ -679,21 +676,22 @@
   <header class="hero-section">
     <div class="hero-container">
       <div class="hero-content">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> Emergency health identity</p>
         <h1 class="hero-heading" id="title">
-          Your emergency health info,<br>always when it matters.
+          <span>Your health story,</span><br><em>ready when seconds count.</em>
         </h1>
         <p class="hero-subtext tagline">
-          A secure, consent-driven digital health identity with instant offline QR access and verified ABHA sync for critical moments.
+          PulseTag keeps critical details, your ABHA link, and an emergency QR together—so you stay in control while care teams get the context they need.
         </p>
-        <a href="language.html" class="get-started">
-          Get Started Now
-        </a>
+        <div class="hero-actions"><a href="language.html" class="get-started">Create my PulseTag <span aria-hidden="true">→</span></a><a href="#how-it-works" class="text-action">See how it works <span aria-hidden="true">→</span></a></div>
+        <div class="hero-proof" aria-label="PulseTag benefits"><span><i aria-hidden="true">✓</i> Emergency QR ready</span><span><i aria-hidden="true">✓</i> Privacy in your control</span></div>
       </div>
 
       <div class="hero-visual" aria-hidden="true">
         <div class="illustration-cluster">
+          <div class="profile-orb"><span>Protected</span><span class="orb-pulse"></span></div>
           <div class="cluster-card featured">
-            <div class="cluster-icon-box" style="background: #e0f2fe; color: #0284c7;">
+            <div class="cluster-icon-box">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="7" height="7"></rect>
                 <rect x="14" y="3" width="7" height="7"></rect>
@@ -702,29 +700,26 @@
               </svg>
             </div>
             <div>
-              <h3>Instant Emergency QR</h3>
-              <p>Scannable by responders with zero app download required</p>
+              <span class="live-status"><i></i> Ready for emergencies</span><h3>Your emergency card</h3><p>Essential details, available from a secure QR scan.</p>
             </div>
           </div>
 
           <div class="cluster-card">
-            <div class="cluster-icon-box" style="background: #fee2e2; color: #dc2626; margin-bottom: 12px;">
+            <div class="cluster-icon-box coral-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
               </svg>
             </div>
-            <h3>Blood & Allergies</h3>
-            <p>Critical vitals in one clean tap</p>
+            <p class="mini-label">ESSENTIALS</p><h3>Blood & allergies</h3><p>Critical context at a glance.</p>
           </div>
 
           <div class="cluster-card">
-            <div class="cluster-icon-box" style="background: #dcfce7; color: #16a34a; margin-bottom: 12px;">
+            <div class="cluster-icon-box mint-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
               </svg>
             </div>
-            <h3>ABDM Verified</h3>
-            <p>Official Ayushman Bharat linking</p>
+            <p class="mini-label">CONNECTED</p><h3>ABHA linked</h3><p>Your verified health identity.</p>
           </div>
         </div>
       </div>
@@ -798,7 +793,7 @@
   </main>
 
   <!-- How It Works Showcase -->
-  <section class="content-section" style="padding-top: 0;">
+  <section class="content-section" id="how-it-works" style="padding-top: 0;">
     <div class="section-header">
       <h2 class="section-heading">How PulseTag works in 4 simple steps</h2>
       <p class="section-subheading">From setup to life-saving access in under two minutes.</p>
@@ -936,6 +931,15 @@
     } catch (error) {
       // If state cannot be read, remain on the welcome screen.
     }
+  </script>
+  <script>
+    const menuButton = document.querySelector('.menu-toggle');
+    const navigation = document.querySelector('.nav-links');
+    if (menuButton && navigation) menuButton.addEventListener('click', () => {
+      const open = navigation.classList.toggle('is-open');
+      menuButton.classList.toggle('is-open', open);
+      menuButton.setAttribute('aria-expanded', String(open));
+    });
   </script>
 </body>
 </html>

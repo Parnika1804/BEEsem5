@@ -149,6 +149,7 @@ const translations = {
   }
 };
 
+
 function setLanguage(language) {
   const selectedTranslations = translations[language] || translations.en;
 
