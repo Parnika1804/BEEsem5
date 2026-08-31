@@ -343,6 +343,7 @@
       border-top: 1px solid var(--border);
       margin-top: 4px;
     }
+      .access-error {
       display: none;
       padding: 32px 24px;
       border-radius: 20px;
@@ -402,7 +403,7 @@
       img, svg, canvas, video { max-width: 100%; }
       button, input, select, textarea { max-width: 100%; }
     }
-    @media (max-width: 480px) {
+        @media (max-width: 480px) {
       .navbar { padding: 14px 16px; }
       .nav-link { margin-left: 0; overflow-wrap: anywhere; }
       .card, .content { padding: 28px 16px; border-radius: 20px; }
@@ -410,10 +411,404 @@
       .document { flex-wrap: wrap; }
       .button, button, input, select, textarea { width: 100%; }
     }
+
+
+    /* =========================================================
+       DARK MODE
+       Light mode is NOT affected
+       ========================================================= */
+
+    body.dark-mode .announcement-bar,
+    body.dark .announcement-bar,
+    html.dark .announcement-bar {
+      background: #241014;
+      color: #ff6b73;
+    }
+
+    body.dark-mode .announcement-badge,
+    body.dark .announcement-badge,
+    html.dark .announcement-badge {
+      background: #ff3b45;
+    }
+
+
+    /* Main headings */
+
+    body.dark-mode h1,
+    body.dark h1,
+    html.dark h1 {
+      color: #f8fafc;
+    }
+
+    body.dark-mode .brand-title,
+    body.dark .brand-title,
+    html.dark .brand-title {
+      color: #f8fafc;
+    }
+
+
+    /* Emergency Critical Vitals */
+
+    body.dark-mode .emergency-section,
+    body.dark .emergency-section,
+    html.dark .emergency-section {
+      background: #171b25;
+      border: 1px solid #713d45;
+    }
+
+    body.dark-mode .emergency-section h2,
+    body.dark .emergency-section h2,
+    html.dark .emergency-section h2 {
+      color: #f8fafc;
+    }
+
+
+    /* RED LABELS — brighter in dark mode */
+
+    body.dark-mode .emergency-label,
+    body.dark .emergency-label,
+    html.dark .emergency-label {
+      color: #ff4d5a;
+    }
+
+
+    /* Values */
+
+    body.dark-mode .emergency-value,
+    body.dark .emergency-value,
+    html.dark .emergency-value {
+      color: #f8fafc;
+    }
+
+
+    /* Individual vital cards */
+
+    body.dark-mode .emergency-item,
+    body.dark .emergency-item,
+    html.dark .emergency-item {
+      background: #111f2d;
+      border: 1px solid #71434a;
+    }
+
+
+    /* Invalid / Expired Link */
+
+    body.dark-mode .access-error,
+    body.dark .access-error,
+    html.dark .access-error {
+      background: #351419;
+      border: 1px solid #ff4d5a;
+      color: #ff6b73;
+    }
+
+    body.dark-mode .access-error h2,
+    body.dark .access-error h2,
+    html.dark .access-error h2 {
+      color: #ffffff;
+    }
+
+    body.dark-mode .access-error p,
+    body.dark .access-error p,
+    html.dark .access-error p {
+      color: #ffd1d5;
+    }
+
+
+    /* Vault headings */
+
+    body.dark-mode .vault-heading h2,
+    body.dark .vault-heading h2,
+    html.dark .vault-heading h2 {
+      color: #f8fafc;
+    }
+
+
+    /* Document cards */
+
+    body.dark-mode .document,
+    body.dark .document,
+    html.dark .document {
+      background: #111f2d;
+    }
+
+    body.dark-mode .filename,
+    body.dark .filename,
+    html.dark .filename {
+      color: #f8fafc;
+    }
+
+
+    /* Doctor history cards */
+
+    body.dark-mode .doctor-visit-card,
+    body.dark .doctor-visit-card,
+    html.dark .doctor-visit-card {
+      background: #111f2d;
+    }
+
+    body.dark-mode .doctor-visit-name,
+    body.dark .doctor-visit-name,
+    html.dark .doctor-visit-name {
+      color: #f8fafc;
+    }
+
+
+    /* PDF icon */
+
+    body.dark-mode .document-icon.pdf,
+    body.dark .document-icon.pdf,
+    html.dark .document-icon.pdf {
+      background: #3a171c;
+      color: #ff5a64;
+    }
+
+
+    /* Back link */
+
+    body.dark-mode .back,
+    body.dark .back,
+    html.dark .back {
+      color: #f8fafc;
+    }
+
+
+    /* Count badge */
+
+    body.dark-mode .count,
+    body.dark .count,
+    html.dark .count {
+      background: #1e293b;
+      color: #cbd5e1;
+    }
+
+  
   </style>
   <link rel="stylesheet" href="theme.css">
-  <link rel="stylesheet" href="globals.css">
+<link rel="stylesheet" href="globals.css">
+
+<style>
+
+/* =========================================================
+   DARK MODE - HIGH CONTRAST
+   Light mode remains unchanged
+   ========================================================= */
+
+/* Main heading */
+html.dark h1,
+body.dark h1,
+html[data-theme="dark"] h1,
+body[data-theme="dark"] h1,
+.dark h1 {
+    color: #ffffff !important;
+}
+
+
+/* Brand */
+html.dark .brand-title,
+body.dark .brand-title,
+html[data-theme="dark"] .brand-title,
+body[data-theme="dark"] .brand-title,
+.dark .brand-title {
+    color: #ffffff !important;
+}
+
+
+/* Emergency section */
+html.dark .emergency-section,
+body.dark .emergency-section,
+html[data-theme="dark"] .emergency-section,
+body[data-theme="dark"] .emergency-section,
+.dark .emergency-section {
+    background: #171f2a !important;
+    border: 1px solid #34516a !important;
+}
+
+
+/* Emergency heading */
+html.dark .emergency-section h2,
+body.dark .emergency-section h2,
+html[data-theme="dark"] .emergency-section h2,
+body[data-theme="dark"] .emergency-section h2,
+.dark .emergency-section h2 {
+    color: #ffffff !important;
+}
+
+
+/* RED LABELS */
+html.dark .emergency-label,
+body.dark .emergency-label,
+html[data-theme="dark"] .emergency-label,
+body[data-theme="dark"] .emergency-label,
+.dark .emergency-label {
+    color: #ff4d5a !important;
+}
+
+
+/* Values */
+html.dark .emergency-value,
+body.dark .emergency-value,
+html[data-theme="dark"] .emergency-value,
+body[data-theme="dark"] .emergency-value,
+.dark .emergency-value {
+    color: #ffffff !important;
+}
+
+
+/* Individual emergency cards */
+html.dark .emergency-item,
+body.dark .emergency-item,
+html[data-theme="dark"] .emergency-item,
+body[data-theme="dark"] .emergency-item,
+.dark .emergency-item {
+    background: #142536 !important;
+    border: 1px solid #ff7b84 !important;
+}
+
+
+/* Invalid / expired box */
+html.dark .access-error,
+body.dark .access-error,
+html[data-theme="dark"] .access-error,
+body[data-theme="dark"] .access-error,
+.dark .access-error {
+    background: #351419 !important;
+    border: 1px solid #ff4d5a !important;
+}
+
+
+/* Error heading */
+html.dark .access-error h2,
+body.dark .access-error h2,
+html[data-theme="dark"] .access-error h2,
+body[data-theme="dark"] .access-error h2,
+.dark .access-error h2 {
+    color: #ffffff !important;
+}
+
+
+/* Error paragraph */
+html.dark .access-error p,
+body.dark .access-error p,
+html[data-theme="dark"] .access-error p,
+body[data-theme="dark"] .access-error p {
+    color: #ffd1d5 !important;
+}
+
+
+/* Vault headings */
+html.dark .vault-heading h2,
+body.dark .vault-heading h2,
+html[data-theme="dark"] .vault-heading h2,
+body[data-theme="dark"] .vault-heading h2,
+.dark .vault-heading h2 {
+    color: #ffffff !important;
+}
+
+
+/* Document cards */
+html.dark .document,
+body.dark .document,
+html[data-theme="dark"] .document,
+body[data-theme="dark"] .document,
+.dark .document {
+    background: #142536 !important;
+}
+
+
+/* Document filename */
+html.dark .filename,
+body.dark .filename,
+html[data-theme="dark"] .filename,
+body[data-theme="dark"] .filename,
+.dark .filename {
+    color: #ffffff !important;
+}
+
+
+/* Doctor visit cards */
+html.dark .doctor-visit-card,
+body.dark .doctor-visit-card,
+html[data-theme="dark"] .doctor-visit-card,
+body[data-theme="dark"] .doctor-visit-card,
+.dark .doctor-visit-card {
+    background: #142536 !important;
+}
+
+
+/* Doctor name */
+html.dark .doctor-visit-name,
+body.dark .doctor-visit-name,
+html[data-theme="dark"] .doctor-visit-name,
+body[data-theme="dark"] .doctor-visit-name,
+.dark .doctor-visit-name {
+    color: #ffffff !important;
+}
+
+
+/* Doctor notes */
+html.dark .doctor-visit-notes,
+body.dark .doctor-visit-notes,
+html[data-theme="dark"] .doctor-visit-notes,
+body[data-theme="dark"] .doctor-visit-notes {
+    color: #e2e8f0 !important;
+}
+
+
+/* PDF icon */
+html.dark .document-icon.pdf,
+body.dark .document-icon.pdf,
+html[data-theme="dark"] .document-icon.pdf,
+body[data-theme="dark"] .document-icon.pdf,
+.dark .document-icon.pdf {
+    background: #3a171c !important;
+    color: #ff5a64 !important;
+}
+
+
+/* Count badge */
+html.dark .count,
+body.dark .count,
+html[data-theme="dark"] .count,
+body[data-theme="dark"] .count,
+.dark .count {
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
+}
+
+
+/* RETURN TO PULSETAG HOME */
+html.dark .back,
+body.dark .back,
+html[data-theme="dark"] .back,
+body[data-theme="dark"] .back,
+.dark .back {
+    color: #ffffff !important;
+}
+
+
+/* Announcement bar */
+html.dark .announcement-bar,
+body.dark .announcement-bar,
+html[data-theme="dark"] .announcement-bar,
+body[data-theme="dark"] .announcement-bar {
+    background: #241014 !important;
+    color: #ff6b73 !important;
+}
+
+
+/* Announcement red dot */
+html.dark .announcement-badge,
+body.dark .announcement-badge,
+html[data-theme="dark"] .announcement-badge,
+body[data-theme="dark"] .announcement-badge {
+    background: #ff3b45 !important;
+}
+
+</style>
+
 </head>
+  
+
 <body>
   <!-- Top Announcement Bar -->
   <div class="announcement-bar">
