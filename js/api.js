@@ -24,7 +24,7 @@ async function fetchNearbyHospitals(lat, lon, radiusMeters = 5000) {
   return fetchAndParse(url, { headers: { Accept: "application/json" } });
 }
 
-// Fetches the daily health tip from the public ZenQuotes API.
+// Fetches the daily health tip from the public ZenQuotes API via a CORS proxy.
 async function fetchHealthTip() {
-  return fetchAndParse("https://zenquotes.io/api/today", { headers: { Accept: "application/json" } });
+  return fetchAndParse("https://api.allorigins.win/get?url=" + encodeURIComponent("https://zenquotes.io/api/today"), { headers: { Accept: "application/json" } });
 }

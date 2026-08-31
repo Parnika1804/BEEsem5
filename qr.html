@@ -15,6 +15,7 @@
   <script src="js/i18n.js"></script>
   <script src="js/api.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 
   <style>
     * {
@@ -480,6 +481,19 @@
         padding: 0;
       }
     }
+
+    .json-qr-section {
+      margin: 28px auto 0;
+      max-width: 460px;
+      text-align: center;
+    }
+
+    .json-qr-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
   </style>
   <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/globals.css">
@@ -558,6 +572,13 @@
           <strong>Medical vault link</strong>
           <span id="vaultLinkText"></span>
           <p>This QR also gives access to your shared medical vault.</p>
+        </div>
+
+        <div class="json-qr-section">
+          <p class="json-qr-label">Offline QR — scan to view raw data, no internet needed</p>
+          <div class="qr-wrapper" style="margin: 8px auto 0;">
+            <div id="offlineQrContainer" aria-label="Offline emergency JSON QR code"></div>
+          </div>
         </div>
 
         <button
@@ -726,6 +747,24 @@
           "QR generator is unavailable. Check your internet connection and reload."
         );
       }
+
+      // Offline QR — encodes emergency data as plain JSON text (not a data: URI).
+      // Any QR scanner app that shows raw text will display the JSON directly.
+      if (typeof QRCode !== "undefined") {
+        const offlineMedicalData = {
+          bloodGroup: state.emergencyInfo?.bloodGroup || null,
+          allergies: state.emergencyInfo?.allergies || [],
+          medications: state.emergencyInfo?.medications || [],
+          contactName: state.emergencyInfo?.contactName || null,
+          contactPhone: state.emergencyInfo?.contactPhone || null
+        };
+        new QRCode(document.getElementById("offlineQrContainer"), {
+          text: JSON.stringify(offlineMedicalData),
+          width: 200,
+          height: 200,
+          correctLevel: QRCode.CorrectLevel.L
+        });
+      }
     }
 
     saveButton.addEventListener("click", () => {
@@ -890,12 +929,16 @@
         return;
       }
 
-      const detector = new BarcodeDetector({ formats: ["qr_code"] });
-      const codes = await detector.detect(scannerVideo);
+      scannerCanvas.width = scannerVideo.videoWidth;
+      scannerCanvas.height = scannerVideo.videoHeight;
+      const ctx = scannerCanvas.getContext("2d");
+      ctx.drawImage(scannerVideo, 0, 0);
+      const imageData = ctx.getImageData(0, 0, scannerCanvas.width, scannerCanvas.height);
+      const code = jsQR(imageData.data, imageData.width, imageData.height);
 
-      if (codes.length) {
+      if (code) {
         stopCamera();
-        showScanResult(codes[0].rawValue);
+        showScanResult(code.data);
         showScannerMessage(t("qr.scanSuccess", "QR code scanned successfully."));
         return;
       }
@@ -909,7 +952,7 @@
     });
 
     cameraButton.addEventListener("click", async () => {
-      if (!("BarcodeDetector" in window) || !("mediaDevices" in navigator)) {
+      if (!("mediaDevices" in navigator)) {
         showScannerMessage(t("qr.cameraUnsupported", "Camera scanning is not supported here. Choose a QR image instead."));
         return;
       }
@@ -931,7 +974,7 @@
     imageInput.addEventListener("change", async () => {
       const file = imageInput.files?.[0];
 
-      if (!file || !("BarcodeDetector" in window)) {
+      if (!file) {
         showScannerMessage(t("qr.imageUnsupported", "Image scanning is not supported by this browser."));
         return;
       }
@@ -940,15 +983,16 @@
         const bitmap = await createImageBitmap(file);
         scannerCanvas.width = bitmap.width;
         scannerCanvas.height = bitmap.height;
-        scannerCanvas.getContext("2d").drawImage(bitmap, 0, 0);
-        const detector = new BarcodeDetector({ formats: ["qr_code"] });
-        const codes = await detector.detect(scannerCanvas);
+        const ctx = scannerCanvas.getContext("2d");
+        ctx.drawImage(bitmap, 0, 0);
+        const imageData = ctx.getImageData(0, 0, scannerCanvas.width, scannerCanvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height);
 
-        if (!codes.length) {
+        if (!code) {
           throw new Error("No QR code found");
         }
 
-        showScanResult(codes[0].rawValue);
+        showScanResult(code.data);
         showScannerMessage(t("qr.scanSuccess", "QR code scanned successfully."));
       } catch (error) {
         showScannerMessage(t("qr.imageError", "Could not read a QR code from that image."));

@@ -684,19 +684,57 @@
         }
       });
 
+    const FALLBACK_TIPS = [
+      "Drink at least 8 glasses of water daily to stay hydrated and support organ function.",
+      "Aim for 7–9 hours of sleep each night — it's when your body repairs itself.",
+      "Take a 5-minute walk every hour if you sit at a desk. Movement prevents stiffness and boosts focus.",
+      "Eat a rainbow of vegetables daily — different colours provide different essential nutrients.",
+      "Wash your hands for at least 20 seconds before meals and after using the restroom.",
+      "Limit sugary drinks. Replace them with water, herbal tea, or coconut water.",
+      "Do 30 minutes of moderate exercise most days — even brisk walking counts.",
+      "Keep an updated list of your medications and allergies. Share it with your doctor at every visit.",
+      "Check your blood pressure regularly. Hypertension often has no symptoms until it's serious.",
+      "Mental health is health. It's okay to ask for help when you're feeling overwhelmed.",
+      "Sunscreen isn't just for the beach — apply SPF 30+ daily to protect against UV damage.",
+      "Eat slowly and chew thoroughly. It aids digestion and helps you recognise fullness.",
+      "Know your family medical history. Many conditions have a genetic component.",
+      "Carry your emergency contact and blood group information with you at all times.",
+      "Get a full health check-up at least once a year, even if you feel fine."
+    ];
+
     async function loadHealthTip() {
       const healthTipText = document.getElementById("healthTipText");
-      const result = await fetchHealthTip();
 
-      if (!result.success) {
-        healthTipText.textContent = result.error;
-        return;
+      function showFallback() {
+        const dayIndex = Math.floor(Date.now() / 86400000) % FALLBACK_TIPS.length;
+        healthTipText.textContent = FALLBACK_TIPS[dayIndex];
       }
 
-      const tip = Array.isArray(result.data) ? result.data[0] : result.data;
-      healthTipText.textContent = tip?.q
-        ? `${tip.q}${tip.a ? ` - ${tip.a}` : ""}`
-        : "Health tip unavailable right now.";
+      try {
+        const result = await fetchHealthTip();
+
+        if (!result.success) {
+          showFallback();
+          return;
+        }
+
+        // allorigins wraps the response in { contents: "..." }
+        let parsed = result.data;
+        if (parsed?.contents) {
+          try { parsed = JSON.parse(parsed.contents); } catch (e) { /* fall through */ }
+        }
+
+        const tip = Array.isArray(parsed) ? parsed[0] : parsed;
+        const text = tip?.q ? `${tip.q}${tip.a ? ` — ${tip.a}` : ""}` : null;
+
+        if (text) {
+          healthTipText.textContent = text;
+        } else {
+          showFallback();
+        }
+      } catch (e) {
+        showFallback();
+      }
     }
 
     loadHealthTip();
